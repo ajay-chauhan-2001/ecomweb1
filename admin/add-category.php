@@ -16,16 +16,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name']);
     $status = $_POST['status'];
 
-    if ($name != '') {
-        $stmt = $conn->prepare("INSERT INTO categories (name, status, created_at) VALUES (?, ?, NOW())");
-        $stmt->bind_param('ss', $name, $status);
-        if ($stmt->execute()) {
-            $success = true;
+    if ($name != '' && isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
+        $image = $_FILES['image'];
+
+        // Allowed image types
+        $allowed_types = ['image/jpeg', 'image/png', 'image/webp'];
+
+        if (in_array($image['type'], $allowed_types)) {
+            // Extract extension
+            $ext = pathinfo($image['name'], PATHINFO_EXTENSION);
+            $ext = strtolower($ext);
+
+            // Create new image name: category_TIMESTAMP.ext
+            $image_name = 'category_' . time() . '.' . $ext;
+            $target_directory = '../assets/images/categories/' . $image_name;
+
+            if (move_uploaded_file($image['tmp_name'], $target_directory)) {
+                // Insert into database
+                $stmt = $conn->prepare("INSERT INTO categories (name, image, status, created_at) VALUES (?, ?, ?, NOW())");
+                $stmt->bind_param('sss', $name, $image_name, $status);
+                if ($stmt->execute()) {
+                    $success = true;
+                } else {
+                    $error = "Database error. Please try again.";
+                }
+            } else {
+                $error = "Failed to upload image. Please try again.";
+            }
         } else {
-            $error = "Something went wrong. Please try again.";
+            $error = "Invalid image type. Only JPG, PNG, and WEBP allowed.";
         }
     } else {
-        $error = "Category name is required.";
+        $error = "All fields including image are required.";
     }
 }
 
@@ -40,7 +62,7 @@ require_once 'includes/header.php';
         <div class="card-body">
             <h2 class="text-center mb-4">Add New Category</h2>
 
-            <form id="addCategoryForm" method="POST">
+            <form id="addCategoryForm" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label">Category Name</label>
                     <input type="text" name="name" class="form-control" required>
@@ -53,6 +75,11 @@ require_once 'includes/header.php';
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Category Image</label>
+                    <input type="file" name="image" class="form-control" accept="image/*" required>
                 </div>
 
                 <div class="card-footer text-end">
@@ -81,6 +108,10 @@ $(document).ready(function() {
             },
             status: {
                 required: true
+            },
+            image: {
+                required: true,
+                extension: "jpg|jpeg|png|webp"
             }
         },
         messages: {
@@ -90,6 +121,10 @@ $(document).ready(function() {
             },
             status: {
                 required: "Please select a status"
+            },
+            image: {
+                required: "Please upload an image",
+                extension: "Only JPG, JPEG, PNG, or WEBP files are allowed"
             }
         },
         errorClass: "text-danger",

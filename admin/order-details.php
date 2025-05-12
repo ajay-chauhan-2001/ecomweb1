@@ -13,20 +13,7 @@ $conn = getDBConnection();
 // Get order ID from URL
 $order_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-// Handle status update
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
-    $status = $_POST['status'];
-
-    $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE id = ?");
-    $stmt->bind_param('si', $status, $order_id);
-    $stmt->execute();
-    $stmt->close();
-
-    header('Location: order-details.php?id=' . $order_id . '&message=Order status updated successfully');
-    exit;
-}
-
-// Get order details with user information
+// Get order details with user information first
 $stmt = $conn->prepare("SELECT o.*, u.name as customer_name, u.email, u.phone, u.address 
                         FROM orders o 
                         JOIN users u ON o.user_id = u.id 
@@ -40,6 +27,24 @@ $stmt->close();
 if (!$order) {
     header('Location: orders.php?error=Order not found');
     exit;
+}
+
+// Handle status update (after fetching order)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
+    if ($order['status'] !== 'delivered') { // Only allow update if not delivered
+        $status = $_POST['status'];
+
+        $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE id = ?");
+        $stmt->bind_param('si', $status, $order_id);
+        $stmt->execute();
+        $stmt->close();
+
+        header('Location: order-details.php?id=' . $order_id . '&message=Order status updated successfully');
+        exit;
+    } else {
+        header('Location: order-details.php?id=' . $order_id . '&error=Cannot change status after delivered');
+        exit;
+    }
 }
 
 // Get order items
@@ -71,6 +76,8 @@ require_once 'includes/header.php';
 
     <?php if (isset($_GET['message'])): ?>
         <div class="alert alert-success"><?php echo htmlspecialchars($_GET['message']); ?></div>
+    <?php elseif (isset($_GET['error'])): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($_GET['error']); ?></div>
     <?php endif; ?>
 
     <div class="row">
@@ -87,14 +94,16 @@ require_once 'includes/header.php';
                     <div class="mb-3">
                         <strong>Status:</strong>
                         <form method="POST" class="d-inline">
-                            <select name="status" class="form-select d-inline w-auto" onchange="this.form.submit()">
+                            <select name="status" class="form-select d-inline w-auto" onchange="this.form.submit()" <?php echo $order['status'] == 'delivered' ? 'disabled' : ''; ?>>
                                 <option value="pending" <?php echo $order['status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
                                 <option value="processing" <?php echo $order['status'] == 'processing' ? 'selected' : ''; ?>>Processing</option>
                                 <option value="shipped" <?php echo $order['status'] == 'shipped' ? 'selected' : ''; ?>>Shipped</option>
                                 <option value="delivered" <?php echo $order['status'] == 'delivered' ? 'selected' : ''; ?>>Delivered</option>
                                 <option value="cancelled" <?php echo $order['status'] == 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
                             </select>
-                            <input type="hidden" name="update_status" value="1">
+                            <?php if ($order['status'] !== 'delivered'): ?>
+                                <input type="hidden" name="update_status" value="1">
+                            <?php endif; ?>
                         </form>
                     </div>
                     <div class="mb-3">

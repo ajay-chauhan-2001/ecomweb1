@@ -70,98 +70,142 @@ $featuredProducts = getAllProducts();
 
 
 <!-- Categories Section -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+<style>
+    .swiper {
+        width: 100%;
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+    .swiper-slide {
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 450px; /* Adjust based on your design */
+    }
+    .category-card {
+        width: 100%;
+        max-width: 350px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        border: none;
+    }
+    .card-img-overlay {
+        background: rgba(0, 0, 0, 0.4);
+        transition: background 0.3s;
+    }
+    .category-card:hover .card-img-overlay {
+        background: rgba(0, 0, 0, 0.6);
+    }
+</style>
+
 <section class="categories py-5 bg-light">
-    <div class="container">
-        <h2 class="text-center mb-4">Shop by Category</h2>
+  <div class="container">
+      <h2 class="text-center mb-4">Shop by Category</h2>
 
-        <!-- Swiper -->
-        <div class="swiper mySwiper">
-            <div class="swiper-wrapper">
+      <!-- Swiper -->
+      <div class="swiper mySwiper">
+          <div class="swiper-wrapper">
 
-                <?php 
-                $categories = getAllCategories();
-                foreach ($categories as $category): 
-                    $productCount = getProductCountByCategory($category['id']);
-                ?>
-                <div class="swiper-slide">
-                    <div class="card category-card h-100">
-                        <a href="shop.php?category=<?php echo htmlspecialchars($category['slug']); ?>" class="text-decoration-none">
-                            <img src="assets/images/categories/<?php echo htmlspecialchars($category['image']); ?>" 
-                                 class="card-img" 
-                                 alt="<?php echo htmlspecialchars($category['name']); ?>"
-                                 style="height: 300px; object-fit: cover;">
-                            <div class="card-img-overlay d-flex align-items-center justify-content-center">
-                                <div class="text-center">
-                                    <i class="fas fa-arrow-right text-white fa-2x"></i>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="card-footer bg-white text-center">
-                            <h3 class="h5 mb-1"><?php echo htmlspecialchars($category['name']); ?></h3>
-                            <p class="text-muted mb-0"><?php echo $productCount; ?> Products</p>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
+              <?php 
+              // Assume you have these functions ready
+              $categories = getAllCategories();
+              foreach ($categories as $category): 
+                  $productCount = getProductCountByCategory($category['id']);
+              ?>
+              <div class="swiper-slide">
+                  <div class="card category-card h-100">
+                      <a href="shop.php?category=<?php echo htmlspecialchars($category['slug']); ?>" class="text-decoration-none">
+                          <img src="assets/images/categories/<?php echo htmlspecialchars($category['image']); ?>" 
+                              class="card-img" 
+                              alt="<?php echo htmlspecialchars($category['name']); ?>"
 
-            </div>
+                              style="height: 300px; object-fit: cover;">
+                          <div class="card-img-overlay d-flex align-items-center justify-content-center">
+                              <div class="text-center">
+                                  <i class="fas fa-arrow-right text-white fa-2x"></i>
+                              </div>
+                          </div>
+                      </a>
+                      <div class="card-footer bg-white text-center">
+                          <h3 class="h5 mb-1"><?php echo htmlspecialchars($category['name']); ?></h3>
+                          <p class="text-muted mb-0"><?php echo $productCount; ?> Products</p>
+                      </div>
+                  </div>
+              </div>
+              <?php endforeach; ?>
 
-            <!-- Arrows -->
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
+          </div>
 
-            <!-- Pagination Dots -->
-            <div class="swiper-pagination"></div>
-        </div>
+          <!-- Navigation Buttons -->
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
 
-    </div>
+          <!-- Pagination Dots -->
+          <div class="swiper-pagination"></div>
+      </div>
+
+  </div>
 </section>
+
+<!-- Font Awesome (for the arrow icon) -->
+<script src="https://kit.fontawesome.com/your-fontawesome-kit-code.js" crossorigin="anonymous"></script>
+
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
 <script>
-var swiper = new Swiper(".mySwiper", {
-    effect: "coverflow",
-    grabCursor: true,
-    centeredSlides: true,
-    loop: true,
-    autoplay: {
-        delay: 2000,
-        disableOnInteraction: false,
-    },
-    coverflowEffect: {
-        rotate: 50,
-        stretch: 0,
-        depth: 100,
-        modifier: 1,
-        slideShadows: true,
-    },
-    pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-    },
-    navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-    },
-    breakpoints: {
-        0: {           // Mobile devices
-            slidesPerView: 2,
-            spaceBetween: 10,
-        },
-        768: {         // Tablets
-            slidesPerView: 2,
-            spaceBetween: 20,
-        },
-        992: {         // Desktop
-            slidesPerView: 3,
-            spaceBetween: 30,
-        }
-    }
-});
+  function initializeSwiper() {
+    var swiper = new Swiper(".mySwiper", {
+      effect: "coverflow",
+      grabCursor: true,
+      centeredSlides: true,
+      loop: true,
+      autoplay: {
+          delay: 2000,
+          disableOnInteraction: false,
+      },
+      coverflowEffect: {
+          rotate: 50,
+          stretch: 0,
+          depth: 100,
+          modifier: 1,
+          slideShadows: true,
+      },
+      pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+      },
+      navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+      },
+      breakpoints: {
+          0: {           // Mobile devices
+              slidesPerView: 2,
+              spaceBetween: 10,
+          },
+          768: {         // Tablets
+              slidesPerView: 2,
+              spaceBetween: 20,
+          },
+          992: {         // Desktop
+              slidesPerView: 3,
+              spaceBetween: 30,
+          }
+      }
+    });
+  }
+
+  // Wait until page fully loads (including images)
+  window.addEventListener('load', function() {
+    initializeSwiper();
+  });
 </script>
-
-
 
 
 <!-- New Products Section -->
@@ -241,36 +285,185 @@ var swiper = new Swiper(".mySwiper", {
 
 
 <!-- Reels Section -->
-<!-- Reels Side-by-Side Section -->
 <section class="reels-section">
-  <div class="swiper reels-swiper">
-    <div class="swiper-wrapper">
+  <div class="video-row">
+    <div class="video-half">
+      <video muted autoplay loop playsinline width="300">
+        <source src="assets/video/video1.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="video-half">
+      <video muted autoplay loop playsinline width="300">
+        <source src="assets/video/video3.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
-      <!-- Reel Group 1 -->
-      <div class="swiper-slide">
-        <div class="video-row">
-          <div class="video-half">
-            <video autoplay muted loop playsinline>
-              <source src="assets/video/video1.mp4" type="video/mp4">
-            </video>
-          </div>
-          <div class="video-half">
-            <video autoplay muted loop playsinline>
-              <source src="assets/video/video3.mp4" type="video/mp4">
-            </video>
+<script>
+var swiper = new Swiper(".mySwiper", {
+    effect: "coverflow",
+    grabCursor: true,
+    centeredSlides: true,
+    loop: true,
+    autoplay: {
+        delay: 2000,
+        disableOnInteraction: false,
+    },
+    coverflowEffect: {
+        rotate: 50,
+        stretch: 0,
+        depth: 100,
+        modifier: 1,
+        slideShadows: true,
+    },
+    pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+    },
+    navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+    },
+    breakpoints: {
+        0: {           // Mobile devices
+            slidesPerView: 2,
+            spaceBetween: 10,
+        },
+        768: {         // Tablets
+            slidesPerView: 2,
+            spaceBetween: 20,
+        },
+        992: {         // Desktop
+            slidesPerView: 3,
+            spaceBetween: 30,
+        }
+    }
+});
+</script>
+
+
+<!-- faq -->
+
+<!-- FAQ Section with Enhanced Animations -->
+<section class="faq-section py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-5" data-aos="fade-up">Frequently Asked Questions</h2>
+
+    <div class="accordion" id="faqAccordion">
+
+      <!-- FAQ Item 1 -->
+      <div class="accordion-item" data-aos="fade-right" data-aos-delay="100">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <i class="fas fa-truck me-2 icon-rotate"></i> How long does delivery take?
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Delivery usually takes 5–10 business days, depending on your location and stock availability.
           </div>
         </div>
       </div>
+
+      <!-- FAQ Item 2 -->
+      <div class="accordion-item" data-aos="fade-left" data-aos-delay="200">
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <i class="fas fa-tools me-2 icon-rotate"></i> Do you offer installation services?
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Yes! Free installation is provided for most products. Details will be shared at the time of delivery.
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Item 3 -->
+      <div class="accordion-item" data-aos="fade-right" data-aos-delay="300">
+        <h2 class="accordion-header" id="headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            <i class="fas fa-undo me-2 icon-rotate"></i> What is your return policy?
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Products can be returned within 7 days of delivery if they are unused and in original condition.
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Item 4 -->
+      <div class="accordion-item" data-aos="fade-left" data-aos-delay="400">
+        <h2 class="accordion-header" id="headingFour">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+            <i class="fas fa-pencil-ruler me-2 icon-rotate"></i> Can I customize the furniture?
+          </button>
+        </h2>
+        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Absolutely! Contact us to discuss your customization requirements. We love creating unique pieces!
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- SwiperJS CSS -->
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+<!-- Font Awesome (for icons) -->
+<script src="https://kit.fontawesome.com/your-fontawesome-kit-code.js" crossorigin="anonymous"></script>
 
-<!-- SwiperJS JavaScript -->
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<!-- AOS CSS and JS -->
+<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<script>
+  AOS.init({
+    duration: 800, // animation duration
+    once: true     // only once animation on scroll
+  });
+</script>
+
+<style>
+  .faq-section {
+    background-color: #f8f9fa;
+  }
+  .accordion-button {
+    font-weight: bold;
+    font-size: 1.1rem;
+    background-color: #fff;
+    transition: transform 0.3s ease;
+  }
+  .accordion-button:not(.collapsed) {
+    background-color: #e3f2fd;
+    color: #0d6efd;
+  }
+  .accordion-body {
+    font-size: 1rem;
+    color: #555;
+  }
+  .accordion-button i {
+    color: #0d6efd;
+    transition: transform 0.3s ease;
+  }
+  .accordion-button.collapsed i {
+    transform: rotate(0deg);
+  }
+  .accordion-button:not(.collapsed) i {
+    transform: rotate(180deg);
+  }
+  .icon-rotate {
+    transition: transform 0.3s ease;
+  }
+</style>
+
 
 <!-- Why Choose Us Section -->
 <section class="why-choose-us py-5">
@@ -799,6 +992,11 @@ var swiper = new Swiper(".mySwiper", {
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
+
+
+// preloader
+
+
 
 
 // add to cart 

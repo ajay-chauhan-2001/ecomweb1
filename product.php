@@ -57,10 +57,7 @@ $pageTitle = $product['name'];
                     <?php endif; ?>
                 </div>
 
-                <!--  -->
-
                 <h5 class="mb-3"><?php echo htmlspecialchars($product['description']); ?></h5>
-
 
                 <!-- Add to Cart Form -->
                 <form action="" method="POST" class="add-to-cart-form" novalidate>
@@ -81,111 +78,99 @@ $pageTitle = $product['name'];
                             <i class="fas fa-shopping-cart me-2"></i>Add to Cart
                         </button>
 
-                        <button type="submit" id="buy-now-btn" class="btn btn-primary">
+                        <a href="checkout.php" id="buy-now-btn" class="btn btn-primary">
                             <i class="fas fa-bolt me-2"></i>Buy Now
-                        </button>
+                        </a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </section>
+
+<!-- jQuery and SweetAlert2 -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-$(document).ready(function () {
-    $(".qtyminus").click(function () {
-        var qty = parseInt($("#quantity").val()) || 1;
-        if (qty > 1) {
-            $("#quantity").val(qty - 1);
+function updateCartCount() {
+    $.ajax({
+        url: 'ajax/get_cart_count.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            if (response.status === 'success') {
+                $('#cart-count').text(response.count);
+            }
         }
     });
+}
 
-    $(".qtyplus").click(function () {
-        var qty = parseInt($("#quantity").val()) || 1;
-        var max = parseInt($("#quantity").attr('max')) || 999;
-        if (qty < max) {
-            $("#quantity").val(qty + 1);
-        }
-    });
-
-    $("#quantity").on('input', function() {
-        var val = parseInt($(this).val()) || 1;
-        if (val < 1) val = 1;
-        var max = parseInt($(this).attr('max')) || 999;
-        if (val > max) val = max;
-        $(this).val(val);
-    });
-
-    let isBuyNow = false;
-    $('#buy-now-btn').click(function() {
-        isBuyNow = true;
-    });
-
-    $('.add-to-cart-form').on('submit', function(e) {
-        e.preventDefault();
-
-        const $form = $(this);
-        $form.find('button').prop('disabled', true);
-
-        const productId = $('input[name="product_id"]').val();
-        const quantity = $('input[name="quantity"]').val();
-
-        $.ajax({
-            url: 'ajax/add_to_cart.php',
-            type: 'POST',
-            dataType: 'json', // Expect JSON response
-            data: {
-                product_id: productId,
-                quantity: quantity
-            },
-            success: function(response) {
-                if (response.status === 'success') {
-                    updateCartCount();
-                    if (isBuyNow) {
-                        window.location.href = 'cart.php';
-                    } else {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: response.message || 'Product added successfully.'
-                        });
-                    }
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message || 'Failed to add product.'
-                    });
-                }
-            },
-            error: function() {
+function addToCart(productId, quantity = 1) {
+    $.ajax({
+        url: 'ajax/add_to_cart.php',
+        method: 'POST',
+        data: {
+            product_id: productId,
+            quantity: quantity
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Added!',
+                    text: response.message,
+                    confirmButtonColor: '#3085d6'
+                });
+                updateCartCount();
+            } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Something went wrong. Please try again.'
+                    text: response.message,
+                    confirmButtonColor: '#d33'
                 });
-            },
-            complete: function() {
-                $form.find('button').prop('disabled', false);
             }
-        });
+        },
+        error: function(xhr, status, error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Something went wrong!',
+                confirmButtonColor: '#d33'
+            });
+        }
+    });
+}
+
+$(document).ready(function() {
+    // Handle Add to Cart form submit
+    $('.add-to-cart-form').on('submit', function(e) {
+        e.preventDefault();
+        var productId = $(this).find('input[name="product_id"]').val();
+        var quantity = $(this).find('input[name="quantity"]').val();
+        addToCart(productId, quantity);
     });
 
-    function updateCartCount() {
-        $.ajax({
-            url: 'ajax/get_cart_count.php',
-            type: 'GET',
-            dataType: 'json', // Expect JSON response
-            success: function(response) {
-                if (response.status === 'success') {
-                    $('.cart-count').text(response.count);
-                }
-            }
-        });
-    }
+    // Increase quantity
+    $('.qtyplus').click(function() {
+        var $input = $(this).siblings('.qty');
+        var val = parseInt($input.val());
+        var max = parseInt($input.attr('max'));
+        if (val < max) {
+            $input.val(val + 1);
+        }
+    });
 
-    updateCartCount();
+    // Decrease quantity
+    $('.qtyminus').click(function() {
+        var $input = $(this).siblings('.qty');
+        var val = parseInt($input.val());
+        if (val > 1) {
+            $input.val(val - 1);
+        }
+    });
 });
 </script>
 

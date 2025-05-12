@@ -41,7 +41,7 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - FurniCraft' : 'FurniCraft';
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid d-flex justify-content-between align-items-center py-2">
                 <a class="navbar-brand d-flex align-items-center" href="index.php">
-                    <img src="assets/images/logo.png" alt="FurniCraft Logo" style="width: 120px; height: 60px;">
+                    <img src="assets/images/header_logo.png" alt="FurniCraft Logo" style="width: 120px; height: 60px;">
                 </a>
                 <div class="d-flex align-items-center gap-3">
                     <ul class="navbar-nav flex-row gap-2 me-3">
@@ -111,16 +111,92 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - FurniCraft' : 'FurniCraft';
         <?php endif; ?>
     </div>
 
+
+    <!-- Preloader Start -->
+    <div id="globalPreloader">
+        <div class="preloader-content">
+          <img src="assets/images/header.jpeg" alt="Loading..." style="width: 220px;">
+        </div>
+    </div>
+
+<style>
+#globalPreloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.preloader-content img {
+    width: 100px;
+    height: auto;
+    animation: bounce 2s infinite;
+}
+
+.preloader-content p {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #333;
+    animation: fadeText 2s infinite;
+}
+
+/* Image Bouncing Animation */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Text Fading Animation */
+@keyframes fadeText {
+    0%, 100% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+</style>
+
+<script>
+// Hide preloader after page load
+window.addEventListener('load', function() {
+    const preloader = document.getElementById('globalPreloader');
+    preloader.style.opacity = '0';
+    preloader.style.visibility = 'hidden';
+    preloader.style.transition = 'visibility 0s 0.5s, opacity 0.5s linear';
+});
+</script>
+<!-- Preloader End -->
+
     <!-- Main Content Start -->
     <main class="container py-4" style="max-width: 100%;">
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('get_cart_count.php')
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            document.getElementById('cart-count').textContent = data.cart_count;
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+<script>
+function updateCartCount() {
+    $.ajax({
+        url: 'ajax/get_cart_count.php', // <-- your correct path
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            if (response.status === 'success') {
+                $('#cart-count').text(response.count);
+            }
         }
     });
+}
+$(document).ready(function() {
+    updateCartCount(); // load cart count on every page
 });
 </script>

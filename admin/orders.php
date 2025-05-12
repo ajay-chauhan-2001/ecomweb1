@@ -12,13 +12,29 @@ $conn = getDBConnection();
 // Handle status update
 if (isset($_POST['update_status']) && isset($_POST['order_id']) && isset($_POST['status'])) {
     $order_id = (int)$_POST['order_id'];
-    $status = $_POST['status'];
-    $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE id = ?");
-    $stmt->bind_param("si", $status, $order_id);
+    $new_status = $_POST['status'];
+
+    // Fetch current order status first
+    $stmt = $conn->prepare("SELECT status FROM orders WHERE id = ?");
+    $stmt->bind_param('i', $order_id);
     $stmt->execute();
+    $stmt->bind_result($current_status);
+    $stmt->fetch();
     $stmt->close();
-    header('Location: orders.php?message=Order status updated');
-    exit;
+
+    if ($current_status !== 'delivered') {
+        // Allow update only if not delivered
+        $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE id = ?");
+        $stmt->bind_param("si", $new_status, $order_id);
+        $stmt->execute();
+        $stmt->close();
+
+        header('Location: orders.php?message=Order status updated');
+        exit;
+    } else {
+        header('Location: orders.php?error=Cannot change status of delivered order');
+        exit;
+    }
 }
 
 // Pagination
@@ -75,6 +91,8 @@ require_once 'includes/header.php';
 
                 <?php if (isset($_GET['message'])): ?>
                     <div class="alert alert-success"><?php echo htmlspecialchars($_GET['message']); ?></div>
+                <?php elseif (isset($_GET['error'])): ?>
+                    <div class="alert alert-danger"><?php echo htmlspecialchars($_GET['error']); ?></div>
                 <?php endif; ?>
 
                 <div class="card">
@@ -106,14 +124,16 @@ require_once 'includes/header.php';
                                             <td>
                                                 <form method="POST" class="d-inline">
                                                     <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
-                                                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" <?php echo $order['status'] === 'delivered' ? 'disabled' : ''; ?>>
                                                         <option value="pending" <?php echo $order['status'] === 'pending' ? 'selected' : ''; ?>>Pending</option>
                                                         <option value="processing" <?php echo $order['status'] === 'processing' ? 'selected' : ''; ?>>Processing</option>
                                                         <option value="shipped" <?php echo $order['status'] === 'shipped' ? 'selected' : ''; ?>>Shipped</option>
                                                         <option value="delivered" <?php echo $order['status'] === 'delivered' ? 'selected' : ''; ?>>Delivered</option>
                                                         <option value="cancelled" <?php echo $order['status'] === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
                                                     </select>
-                                                    <input type="hidden" name="update_status" value="1">
+                                                    <?php if ($order['status'] !== 'delivered'): ?>
+                                                        <input type="hidden" name="update_status" value="1">
+                                                    <?php endif; ?>
                                                 </form>
                                             </td>
                                             <td><?php echo date('M d, Y', strtotime($order['created_at'])); ?></td>

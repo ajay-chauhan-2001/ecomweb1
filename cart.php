@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config/database.php'; // Your DB connection
+require_once 'config/database.php'; // DB connection
 
 // User / Guest detection
 if (isset($_SESSION['user_id'])) {
@@ -186,6 +186,7 @@ $stmt->close();
 <!-- Cart AJAX -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+
     const updateQuantity = (productId, action) => {
         fetch('ajax/update_cart.php', {
             method: 'POST',
@@ -201,10 +202,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 animateValueChange(qtyInput, data.new_quantity);
                 animateValueChange(subtotalTd, '₹' + parseFloat(data.new_subtotal).toFixed(2));
 
-                // Update order summary
                 document.getElementById('orderSummarySubtotal').textContent = '₹' + parseFloat(data.order_summary.subtotal).toFixed(2);
                 document.getElementById('orderSummaryDiscount').textContent = '₹' + parseFloat(data.order_summary.discount).toFixed(2);
                 document.getElementById('orderSummaryFinalTotal').textContent = '₹' + parseFloat(data.order_summary.total).toFixed(2);
+
+                updateCartCount();
             } else {
                 alert(data.message || 'Failed to update cart.');
             }
@@ -230,6 +232,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('orderSummarySubtotal').textContent = '₹' + parseFloat(data.order_summary.subtotal).toFixed(2);
                 document.getElementById('orderSummaryDiscount').textContent = '₹' + parseFloat(data.order_summary.discount).toFixed(2);
                 document.getElementById('orderSummaryFinalTotal').textContent = '₹' + parseFloat(data.order_summary.total).toFixed(2);
+
+                updateCartCount();
             } else {
                 alert('Failed to remove item.');
             }
@@ -247,6 +251,26 @@ document.addEventListener('DOMContentLoaded', function() {
             element.style.opacity = 1;
         }, 300);
     };
+
+    function updateCartCount() {
+        fetch('ajax/get_cart_count.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const cartCountElement = document.getElementById('cart-count');
+                if (cartCountElement) {
+                    cartCountElement.textContent = data.count;
+
+                    if (data.count == 0) {
+                        cartCountElement.style.display = 'none';
+                    } else {
+                        cartCountElement.style.display = 'inline-block';
+                    }
+                }
+            }
+        })
+        .catch(error => console.error('Error fetching cart count:', error));
+    }
 
     document.querySelectorAll('.increment').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -270,6 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
 });
 </script>
 
