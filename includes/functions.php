@@ -204,30 +204,6 @@ function getAllProductImages() {
     return $images;
 }
 
-// function addToCart(productId, quantity = 1) {
-//     const formData = new FormData();
-//     formData.append('product_id', productId);
-//     formData.append('quantity', quantity);
-
-//     fetch('add_to_cart.php', {
-//         method: 'POST',
-//         body: formData
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         if (data.success) {
-//             alert(data.message);
-
-//             // ✅ Update cart count badge
-//             document.getElementById('cart-count').textContent = data.cart_count;
-//         } else {
-//             alert(data.message);
-//         }
-//     })
-//     .catch(error => {
-//         console.error('Error:', error);
-//     });
-// }
 
 function getSessionId() {
     if (!isset($_SESSION)) {
@@ -302,17 +278,7 @@ function clearCart() {
 
     $stmt->execute();
 }
-// Clear entire cart
-// function clearCart() {
-//     if (session_status() == PHP_SESSION_NONE) {
-//         session_start();
-//     }
 
-//     $_SESSION['cart'] = [];
-//     return ['success' => true];
-// }
-
-// Get cart item count
 // Get cart item count
 function getCartCount() {
     global $conn;
@@ -357,107 +323,6 @@ function cleanInvalidCartProducts() {
 
 
 // Get all cart items with product info
-
-// Fetch all cart items with product info (database based)
-// function getCartItems() {
-//     global $conn;
-
-//     if (session_status() == PHP_SESSION_NONE) {
-//         session_start();
-//     }
-
-//     $userId = $_SESSION['user_id'] ?? null;
-//     $sessionId = session_id();
-
-//     if ($userId) {
-//         // Logged-in user
-//         $stmt = $conn->prepare("
-//             SELECT c.*, p.name, p.price, p.sale_price, p.stock, p.image
-//             FROM cart c
-//             JOIN products p ON c.product_id = p.id
-//             WHERE c.user_id = ?
-//         ");
-//         $stmt->bind_param('i', $userId);
-//     } else {
-//         // Guest user
-//         $stmt = $conn->prepare("
-//             SELECT c.*, p.name, p.price, p.sale_price, p.stock, p.image
-//             FROM cart c
-//             JOIN products p ON c.product_id = p.id
-//             WHERE c.session_id = ?
-//         ");
-//         $stmt->bind_param('s', $sessionId);
-//     }
-
-//     $stmt->execute();
-//     $result = $stmt->get_result();
-
-//     $items = [];
-//     while ($row = $result->fetch_assoc()) {
-//         $price = ($row['sale_price'] > 0) ? $row['sale_price'] : $row['price'];
-//         $items[] = [
-//             'product_id' => $row['product_id'],
-//             'name' => $row['name'],
-//             'price' => $row['price'],
-//             'sale_price' => $row['sale_price'],
-//             'image' => $row['image'],
-//             'stock' => $row['stock'],
-//             'quantity' => $row['quantity'],
-//             'subtotal' => $price * $row['quantity'],
-//         ];
-//     }
-
-//     $stmt->close();
-
-//     return $items;
-// }
-
-// 
-
-// function getSessionId() {
-//     // Start session if not started
-//     if (session_status() == PHP_SESSION_NONE) {
-//         session_start();
-//     }
-
-//     // If user logged in, use user ID
-//     if (isset($_SESSION['user_id'])) {
-//         return $_SESSION['user_id'];
-//     }
-
-//     // For guest, generate and store a custom session ID
-//     if (!isset($_SESSION['custom_session_id'])) {
-//         $_SESSION['custom_session_id'] = 'guest_' . date('Ymd') . '_' . rand(10000, 99999);
-//     }
-
-//     return $_SESSION['custom_session_id'];
-// }
-
-// Clear cart after order placed
-// function clearCart() {
-//     $conn = getDBConnection();
-//     $session_id = getSessionId();
-
-//     if (isset($_SESSION['user_id'])) {
-//         $stmt = $conn->prepare("DELETE FROM cart WHERE user_id = ? OR session_id = ?");
-//         $stmt->bind_param('is', $_SESSION['user_id'], $session_id);
-//     } else {
-//         $stmt = $conn->prepare("DELETE FROM cart WHERE session_id = ?");
-//         $stmt->bind_param('s', $session_id);
-//     }
-
-//     $stmt->execute();
-// }
-
-// Calculate total cart amount
-// function calculateCartTotal() {
-//     $cartItems = getCartItems();
-//     $total = 0;
-//     foreach ($cartItems as $item) {
-//         $total += $item['subtotal'];
-//     }
-//     return $total;
-// }
 
 // -------------------------------
 // User Functions
@@ -521,45 +386,86 @@ function getProductCountByCategory($categoryId) {
 // -------------------------------
 
 // Fetch filtered products
-function getFilteredProducts($categorySlug = null) {
+function getFilteredProducts($categorySlug = '', $search = '', $sort = 'newest', $page = 1, $perPage = 12) {
     global $conn;
 
-    if ($categorySlug) {
-        $stmt = $conn->prepare("
-            SELECT p.*, c.name as category_name, c.slug as category_slug
-            FROM products p
-            INNER JOIN categories c ON p.category_id = c.id
-            WHERE c.slug = ? AND p.status = 'active'
-            ORDER BY p.created_at DESC
-        ");
-        $stmt->bind_param("s", $categorySlug);
-        $stmt->execute();
-        $result = $stmt->get_result();
-    } else {
-        $result = $conn->query("
-            SELECT p.*, c.name as category_name, c.slug as category_slug
-            FROM products p
-            LEFT JOIN categories c ON p.category_id = c.id
-            WHERE p.status = 'active'
-            ORDER BY p.created_at DESC
-        ");
+    $params = [];
+    $types = '';
+    $where = "WHERE p.status = 'active'";
+
+    if (!empty($categorySlug)) {
+        $where .= " AND c.slug = ?";
+        $params[] = $categorySlug;
+        $types .= 's';
     }
+
+    if (!empty($search)) {
+        $where .= " AND p.name LIKE ?";
+        $params[] = "%" . $search . "%";
+        $types .= 's';
+    }
+
+    // Sorting
+    switch ($sort) {
+        case 'price-low':
+            $orderBy = "ORDER BY COALESCE(p.sale_price, p.price) ASC";
+            break;
+        case 'price-high':
+            $orderBy = "ORDER BY COALESCE(p.sale_price, p.price) DESC";
+            break;
+        default:
+            $orderBy = "ORDER BY p.created_at DESC";
+            break;
+    }
+
+    // Pagination
+    $offset = ($page - 1) * $perPage;
+    $limit = "LIMIT ? OFFSET ?";
+    $params[] = $perPage;
+    $params[] = $offset;
+    $types .= 'ii';
+
+    $sql = "
+        SELECT p.*, c.name as category_name, c.slug as category_slug
+        FROM products p
+        LEFT JOIN categories c ON p.category_id = c.id
+        $where
+        $orderBy
+        $limit
+    ";
+
+    $stmt = $conn->prepare($sql);
+
+    if ($stmt === false) {
+        die("SQL error: " . $conn->error);
+    }
+
+    $stmt->bind_param($types, ...$params);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     return $result->fetch_all(MYSQLI_ASSOC);
 }
+
 
 // Get total products for pagination
 function getTotalProducts($categorySlug = '', $search = '') {
     global $conn;
 
+    $params = [];
+    $types = '';
     $where = "WHERE p.status = 'active'";
 
     if (!empty($categorySlug)) {
-        $where .= " AND c.slug = '" . mysqli_real_escape_string($conn, $categorySlug) . "'";
+        $where .= " AND c.slug = ?";
+        $params[] = $categorySlug;
+        $types .= 's';
     }
 
     if (!empty($search)) {
-        $where .= " AND p.name LIKE '%" . mysqli_real_escape_string($conn, $search) . "%'";
+        $where .= " AND p.name LIKE ?";
+        $params[] = "%" . $search . "%";
+        $types .= 's';
     }
 
     $sql = "
@@ -568,8 +474,16 @@ function getTotalProducts($categorySlug = '', $search = '') {
         LEFT JOIN categories c ON p.category_id = c.id
         $where
     ";
-    $result = $conn->query($sql);
+
+    $stmt = $conn->prepare($sql);
+    if ($types) {
+        $stmt->bind_param($types, ...$params);
+    }
+    $stmt->execute();
+    $result = $stmt->get_result();
     $data = $result->fetch_assoc();
+
     return $data['total'];
 }
+
 ?>

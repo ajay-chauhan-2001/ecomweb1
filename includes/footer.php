@@ -5,7 +5,7 @@
       
       <!-- About/Logo -->
       <div class="col-md-3">
-        <img src="assets/images/logo.png" alt="FurniCraft Logo" style="max-width:120px;" class="mb-2">
+        <img src="assets/images/footer_logo.png" alt="FurniCraft Logo" style="width:180px;" class="mb-2">
         <p class="footer-desc">Premium furniture & decor for modern living. Crafted with care, delivered with pride.</p>
         
       </div>
@@ -49,8 +49,8 @@
       <div class="col-md-3">
       <h5 class="mb-3 fw-bold text-warning">Follow Us</h5>
       <p>
-  <a href="mailto:info@furnixar.com" class="text-decoration-none text-light">
-    <i class="fas fa-envelope me-2 text-light"></i> info@furnixar.com
+  <a href="mailto:info@furnicraft.com" class="text-decoration-none text-light">
+    <i class="fas fa-envelope me-2 text-light"></i> info@furnicraft.com
   </a>
 </p>
 <p>
@@ -68,20 +68,12 @@
         <a href="https://www.instagram.com/techturtlesolution/" class="social-icon instagram" target="_blank" title="Instagram">
             <i class="fab fa-instagram"></i>
         </a>
-        <!-- <a href="https://twitter.com" class="social-icon twitter" target="_blank" title="Twitter">
-            <i class="fab fa-x-twitter"></i> Twitter (new X logo)
-        </a> -->
     </div>
-        <!-- Payment Methods -->
-       
-      
       </div>
 
 
 
     </div>
-
-    <!-- <hr> -->
 
     <div class="d-flex justify-content-between align-items-center flex-wrap small text-muted mt-4 pt-3 border-top">
   
@@ -114,10 +106,13 @@
 </button>
 
 <!-- Scripts -->
+<!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <script>
   AOS.init({
     duration: 1000,
@@ -141,6 +136,7 @@
     });
   });
 </script>
+
 
 <!-- Footer Styles -->
 <style>

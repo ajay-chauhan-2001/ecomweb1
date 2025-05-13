@@ -75,138 +75,110 @@ $featuredProducts = getAllProducts();
 <!-- Swiper CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
 <style>
-    .swiper {
-        width: 100%;
-        padding-top: 50px;
-        padding-bottom: 50px;
-    }
-    .swiper-slide {
-        background: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 450px; /* Adjust based on your design */
-    }
-    .category-card {
-        width: 100%;
-        max-width: 350px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        border: none;
-    }
-    .card-img-overlay {
-        background: rgba(0, 0, 0, 0.4);
-        transition: background 0.3s;
-    }
-    .category-card:hover .card-img-overlay {
-        background: rgba(0, 0, 0, 0.6);
-    }
+  .swiper {
+    width: 100%;
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+  }
+  .category-card {
+    width: 100%;
+    max-width: 350px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+  }
+  .category-card:hover {
+    transform: translateY(-5px);
+  }
+  .category-card img {
+    height: 300px;
+    object-fit: cover;
+  }
+  .card-img-overlay {
+    background: rgba(0, 0, 0, 0.4);
+    transition: background 0.3s;
+  }
+  .category-card:hover .card-img-overlay {
+    background: rgba(0, 0, 0, 0.6);
+  }
 </style>
+
 
 <section class="categories py-5 bg-light">
   <div class="container">
-      <h2 class="text-center mb-4">Shop by Category</h2>
+    <h2 class="text-center mb-4">Shop by Category</h2>
 
-      <!-- Swiper -->
-      <div class="swiper mySwiper">
-          <div class="swiper-wrapper">
-
-              <?php 
-              // Assume you have these functions ready
-              $categories = getAllCategories();
-              foreach ($categories as $category): 
-                  $productCount = getProductCountByCategory($category['id']);
-              ?>
-              <div class="swiper-slide">
-                  <div class="card category-card h-100">
-                      <a href="shop.php?category=<?php echo htmlspecialchars($category['slug']); ?>" class="text-decoration-none">
-                          <img src="assets/images/categories/<?php echo htmlspecialchars($category['image']); ?>" 
-                              class="card-img" 
-                              alt="<?php echo htmlspecialchars($category['name']); ?>"
-
-                              style="height: 300px; object-fit: cover;">
-                          <div class="card-img-overlay d-flex align-items-center justify-content-center">
-                              <div class="text-center">
-                                  <i class="fas fa-arrow-right text-white fa-2x"></i>
-                              </div>
-                          </div>
-                      </a>
-                      <div class="card-footer bg-white text-center">
-                          <h3 class="h5 mb-1"><?php echo htmlspecialchars($category['name']); ?></h3>
-                          <p class="text-muted mb-0"><?php echo $productCount; ?> Products</p>
-                      </div>
-                  </div>
+    <!-- Swiper Container -->
+    <div class="swiper categorySwiper">
+      <div class="swiper-wrapper">
+        <?php 
+        $categories = getAllCategories();
+        foreach ($categories as $category): 
+            $productCount = getProductCountByCategory($category['id']);
+        ?>
+        <div class="swiper-slide">
+          <div class="card category-card h-100">
+            <a href="shop.php?category=<?php echo htmlspecialchars($category['slug']); ?>" class="text-decoration-none">
+              <img src="assets/images/categories/<?php echo htmlspecialchars($category['image']); ?>" 
+                   class="card-img" 
+                   alt="<?php echo htmlspecialchars($category['name']); ?>">
+              <div class="card-img-overlay d-flex align-items-center justify-content-center">
+                <i class="fas fa-arrow-right text-white fa-2x"></i>
               </div>
-              <?php endforeach; ?>
-
+            </a>
+            <div class="card-footer bg-white text-center">
+              <h3 class="h5 mb-1"><?php echo htmlspecialchars($category['name']); ?></h3>
+              <p class="text-muted mb-0"><?php echo $productCount; ?> Products</p>
+            </div>
           </div>
-
-          <!-- Navigation Buttons -->
-          <div class="swiper-button-next"></div>
-          <div class="swiper-button-prev"></div>
-
-          <!-- Pagination Dots -->
-          <div class="swiper-pagination"></div>
+        </div>
+        <?php endforeach; ?>
       </div>
 
+      <!-- Swiper Controls -->
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-pagination mt-3"></div>
+    </div>
   </div>
 </section>
 
-<!-- Font Awesome (for the arrow icon) -->
-<script src="https://kit.fontawesome.com/your-fontawesome-kit-code.js" crossorigin="anonymous"></script>
-
-<!-- Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
-  function initializeSwiper() {
-    var swiper = new Swiper(".mySwiper", {
-      effect: "coverflow",
-      grabCursor: true,
-      centeredSlides: true,
-      loop: true,
-      autoplay: {
-          delay: 2000,
-          disableOnInteraction: false,
-      },
-      coverflowEffect: {
-          rotate: 50,
-          stretch: 0,
-          depth: 100,
-          modifier: 1,
-          slideShadows: true,
-      },
-      pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-      },
-      navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-      },
-      breakpoints: {
-          0: {           // Mobile devices
-              slidesPerView: 2,
-              spaceBetween: 10,
-          },
-          768: {         // Tablets
-              slidesPerView: 2,
-              spaceBetween: 20,
-          },
-          992: {         // Desktop
-              slidesPerView: 3,
-              spaceBetween: 30,
-          }
-      }
-    });
-  }
-
-  // Wait until page fully loads (including images)
-  window.addEventListener('load', function() {
-    initializeSwiper();
+  const categorySwiper = new Swiper(".categorySwiper", {
+    loop: true,
+    autoplay: {
+      delay: 2500,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true
+    },
+    spaceBetween: 30,
+    slidesPerView: 1,
+    breakpoints: {
+      576: { slidesPerView: 2 },
+      768: { slidesPerView: 3 },
+      992: { slidesPerView: 4 },
+      1200: { slidesPerView: 5 }
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev"
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true
+    }
   });
 </script>
-
 
 <!-- New Products Section -->
 <section class="featured-products py-5">
@@ -303,45 +275,39 @@ $featuredProducts = getAllProducts();
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
 <script>
-var swiper = new Swiper(".mySwiper", {
+(function () {
+  const swiper = new Swiper(".mySwiper", {
     effect: "coverflow",
     grabCursor: true,
     centeredSlides: true,
     loop: true,
     autoplay: {
-        delay: 2000,
-        disableOnInteraction: false,
+      delay: 2000,
+      disableOnInteraction: false,
     },
     coverflowEffect: {
-        rotate: 50,
-        stretch: 0,
-        depth: 100,
-        modifier: 1,
-        slideShadows: true,
+      rotate: 50,
+      stretch: 0,
+      depth: 100,
+      modifier: 1,
+      slideShadows: true,
     },
     pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
+      el: ".swiper-pagination",
+      clickable: true,
     },
     navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
     },
     breakpoints: {
-        0: {           // Mobile devices
-            slidesPerView: 2,
-            spaceBetween: 10,
-        },
-        768: {         // Tablets
-            slidesPerView: 2,
-            spaceBetween: 20,
-        },
-        992: {         // Desktop
-            slidesPerView: 3,
-            spaceBetween: 30,
-        }
+      0: { slidesPerView: 2, spaceBetween: 10 },
+      768: { slidesPerView: 2, spaceBetween: 20 },
+      992: { slidesPerView: 3, spaceBetween: 30 }
     }
-});
+  });
+})();
+
 </script>
 
 
@@ -600,40 +566,70 @@ var swiper = new Swiper(".mySwiper", {
 </section>
 
 <!-- Available On Section -->
+<!-- Section -->
 <section class="py-5 text-center" data-aos="fade-down-right" data-aos-duration="1500">
-    <div class="container">
-        <h3 class="mb-4">Available On</h3>
+  <div class="container">
+    <h3 class="mb-4">Available On</h3>
 
-        <div class="row justify-content-center align-items-center">
-        
+    <!-- Swiper Container -->
+    <div class="swiper platformSwiper">
+      <div class="swiper-wrapper">
         <!-- Amazon -->
-        <div class="col-4 col-md-2 text-center mb-3">
-            <a  target="_blank" rel="noopener noreferrer" data-aos="zoom-out-up" data-aos-delay="200">
-                <img src="assets/images/amazon-logo.jfif" alt="Amazon" style="width: 150px;" class="logo-float">
-            </a>
+        <div class="swiper-slide">
+          <a target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/amazon-logo.jfif" alt="Amazon" class="img-fluid logo-float" style="width: 150px;">
+          </a>
         </div>
 
         <!-- Flipkart -->
-        <div class="col-4 col-md-2 text-center mb-3">
-            <a  target="_blank" rel="noopener noreferrer" data-aos="zoom-out-up" data-aos-delay="400">
-                <img src="assets/images/Flipkart logo.jfif" alt="Flipkart" style="width: 150px;" class="logo-float">
-            </a>
+        <div class="swiper-slide">
+          <a target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/Flipkart logo.jfif" alt="Flipkart" class="img-fluid logo-float" style="width: 150px;">
+          </a>
         </div>
 
-         <!-- Amazon -->
-         <div class="col-4 col-md-2 text-center mb-3">
-            <a  target="_blank" rel="noopener noreferrer" data-aos="zoom-out-up" data-aos-delay="200">
-                <img src="assets/images/meesho.jfif" alt="meesho" style="width: 150px;" class="logo-float">
-            </a>
+        <!-- Meesho -->
+        <div class="swiper-slide">
+          <a target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/meesho.jfif" alt="Meesho" class="img-fluid logo-float" style="width: 150px;">
+          </a>
         </div>
+      </div>
 
+      <!-- Optional Pagination -->
+      <div class="swiper-pagination mt-3"></div>
     </div>
-       
-    </div>
-
- 
-
+  </div>
 </section>
+
+
+<script>
+  var platformSwiper = new Swiper(".platformSwiper", {
+    loop: true,
+    autoplay: {
+      delay: 2000,
+      disableOnInteraction: false
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true
+    },
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+        spaceBetween: 20
+      },
+      576: {
+        slidesPerView: 2,
+        spaceBetween: 30
+      },
+      768: {
+        slidesPerView: 3,
+        spaceBetween: 40
+      }
+    }
+  });
+</script>
 
 
 <?php require_once 'includes/footer.php'; ?>

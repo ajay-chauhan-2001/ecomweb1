@@ -89,11 +89,11 @@ require_once 'includes/header.php';
                     <h2>Manage Orders</h2>
                 </div>
 
-                <?php if (isset($_GET['message'])): ?>
-                    <div class="alert alert-success"><?php echo htmlspecialchars($_GET['message']); ?></div>
-                <?php elseif (isset($_GET['error'])): ?>
-                    <div class="alert alert-danger"><?php echo htmlspecialchars($_GET['error']); ?></div>
-                <?php endif; ?>
+            <?php if (isset($_GET['message'])): ?>
+                    <div class="alert alert-success" id="statusMessage"><?php echo htmlspecialchars($_GET['message']); ?></div>
+            <?php elseif (isset($_GET['error'])): ?>
+                    <div class="alert alert-danger" id="statusMessage"><?php echo htmlspecialchars($_GET['error']); ?></div>
+            <?php endif; ?>
 
                 <div class="card">
                     <div class="card-body">
@@ -166,7 +166,28 @@ require_once 'includes/header.php';
         </div>
     </div>
 
+    <style>
+        .fade {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+    </style>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    // Auto-hide alert after 3 seconds
+    setTimeout(() => {
+        const statusMessage = document.getElementById('statusMessage');
+        if (statusMessage) {
+            statusMessage.classList.add('fade');
+            statusMessage.style.transition = 'opacity 0.5s ease-out';
+            statusMessage.style.opacity = '0';
+            setTimeout(() => statusMessage.remove(), 500);
+        }
+    }, 3000);
+</script>
+
 </body>
 </html>
 
