@@ -486,4 +486,14 @@ function getTotalProducts($categorySlug = '', $search = '') {
     return $data['total'];
 }
 
+function getAllCategoriesWithCount() {
+    $conn = getDBConnection();
+    $sql = "SELECT c.id, c.name, c.slug, COUNT(p.id) AS product_count
+            FROM categories c
+            LEFT JOIN products p ON p.category_id = c.id
+            GROUP BY c.id";
+    $result = $conn->query($sql);
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
 ?>
