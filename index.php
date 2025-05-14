@@ -554,6 +554,9 @@ $featuredProducts = getAllProducts();
 
 
 <!-- Icon & Text Slider -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
 <div class="container my-5">
   <div class="swiper featuresSwiper">
     <div class="swiper-wrapper align-items-center">
@@ -597,7 +600,23 @@ $featuredProducts = getAllProducts();
     </div>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+<script>
+  new Swiper(".featuresSwiper", {
+    loop: true,
+    speed: 5000,
+    autoplay: {
+      delay: 0,
+      disableOnInteraction: false,
+    },
+    slidesPerView: "auto",
+    spaceBetween: 40,
+    freeMode: true,
+    freeModeMomentum: false,
+    grabCursor: true
+  });
+</script>
 
 <!-- Categories Section -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
@@ -644,7 +663,7 @@ $featuredProducts = getAllProducts();
   }
 </style>
 
-
+<!-- category section -->
 <section class="categories py-5 bg-light">
   <div class="container">
     <h2 class="text-center mb-4">Shop by Category</h2>
