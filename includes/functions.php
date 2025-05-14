@@ -13,7 +13,7 @@ if (session_status() == PHP_SESSION_NONE) {
 function getAllProducts() {
     global $conn;
     $sql = "
-        SELECT p.*, c.name as category_name, c.slug as category_slug, p.image
+        SELECT p.*, c.name as category_name,  p.image
         FROM products p
         LEFT JOIN categories c ON p.category_id = c.id
         ORDER BY p.created_at DESC
@@ -386,16 +386,16 @@ function getProductCountByCategory($categoryId) {
 // -------------------------------
 
 // Fetch filtered products
-function getFilteredProducts($categorySlug = '', $search = '', $sort = 'newest', $page = 1, $perPage = 12) {
+function getFilteredProducts($categoryName = '', $search = '', $sort = 'newest', $page = 1, $perPage = 12) {
     global $conn;
 
     $params = [];
     $types = '';
     $where = "WHERE p.status = 'active'";
 
-    if (!empty($categorySlug)) {
-        $where .= " AND c.slug = ?";
-        $params[] = $categorySlug;
+    if (!empty($categoryName)) {
+        $where .= " AND c.name = ?";
+        $params[] = $categoryName;
         $types .= 's';
     }
 
@@ -426,7 +426,7 @@ function getFilteredProducts($categorySlug = '', $search = '', $sort = 'newest',
     $types .= 'ii';
 
     $sql = "
-        SELECT p.*, c.name as category_name, c.slug as category_slug
+        SELECT p.*, c.name as category_name
         FROM products p
         LEFT JOIN categories c ON p.category_id = c.id
         $where
@@ -435,9 +435,8 @@ function getFilteredProducts($categorySlug = '', $search = '', $sort = 'newest',
     ";
 
     $stmt = $conn->prepare($sql);
-
-    if ($stmt === false) {
-        die("SQL error: " . $conn->error);
+    if (!$stmt) {
+        die("SQL Error: " . $conn->error);
     }
 
     $stmt->bind_param($types, ...$params);
@@ -449,16 +448,16 @@ function getFilteredProducts($categorySlug = '', $search = '', $sort = 'newest',
 
 
 // Get total products for pagination
-function getTotalProducts($categorySlug = '', $search = '') {
+function getTotalProducts($categoryName = '', $search = '') {
     global $conn;
 
     $params = [];
     $types = '';
     $where = "WHERE p.status = 'active'";
 
-    if (!empty($categorySlug)) {
-        $where .= " AND c.slug = ?";
-        $params[] = $categorySlug;
+    if (!empty($categoryName)) {
+        $where .= " AND c.name = ?";
+        $params[] = $categoryName;
         $types .= 's';
     }
 
@@ -476,19 +475,26 @@ function getTotalProducts($categorySlug = '', $search = '') {
     ";
 
     $stmt = $conn->prepare($sql);
-    if ($types) {
+    if (!$stmt) {
+        die("SQL Error: " . $conn->error);
+    }
+
+    // Only bind if there are parameters
+    if (!empty($params)) {
         $stmt->bind_param($types, ...$params);
     }
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $data = $result->fetch_assoc();
 
-    return $data['total'];
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+
+    return $result['total'] ?? 0;
 }
+
+
 
 function getAllCategoriesWithCount() {
     $conn = getDBConnection();
-    $sql = "SELECT c.id, c.name, c.slug, COUNT(p.id) AS product_count
+    $sql = "SELECT c.id, c.name, COUNT(p.id) AS product_count
             FROM categories c
             LEFT JOIN products p ON p.category_id = c.id
             GROUP BY c.id";

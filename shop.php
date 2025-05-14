@@ -62,29 +62,62 @@ $categories = getAllCategoriesWithCount();
     <div class="row">
         <!-- Sidebar Categories -->
         <div class="col-md-3 mb-4">
-            <div class="card">
-                <div class="card-header bg-dark text-white">
-                    <strong>Categories</strong>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item <?php echo $category == '' ? 'active' : ''; ?>">
-                        <a href="shop.php" class="text-decoration-none d-flex justify-content-between">
-                            <span>All Categories</span>
-                        </a>
-                    </li>
-                    <?php foreach ($categories as $cat): ?>
-                        <li class="list-group-item <?php echo $category == $cat['slug'] ? 'active' : ''; ?>">
-    <a href="?category=<?php echo $cat['slug']; ?>" 
-       class="text-decoration-none d-flex justify-content-between text-dark <?php echo $category == $cat['slug'] ? 'fw-bold text-primary' : ''; ?>">
-        <span><?php echo htmlspecialchars($cat['name']); ?></span>
-        <span class="badge bg-secondary"><?php echo $cat['product_count']; ?></span>
-    </a>
-</li>
-
-                    <?php endforeach; ?>
-                </ul>
-            </div>
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <strong>Product Categories</strong>
         </div>
+        <ul class="list-group list-group-flush">
+            <?php foreach ($categories as $cat): ?>
+                <li class="list-group-item p-0 border-0">
+                    <a href="?category=<?php echo urlencode($cat['name']); ?>"
+                       class="d-flex justify-content-between align-items-center px-3 py-2 text-decoration-none category-link
+                              <?php echo ($category == $cat['name']) ? 'active-category' : ''; ?>">
+                        <span><?php echo htmlspecialchars($cat['name']); ?></span>
+                        <span class="badge category-badge"><?php echo $cat['product_count']; ?></span>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+
+
+<style>
+ /* Category hover styling */
+.category-link {
+    color: #212529;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.category-link .category-badge {
+    background-color: #6c757d;
+    color: #fff;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hover effect */
+.category-link:hover {
+    background-color: #f1f1f1;
+    color: #0d6efd !important;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.category-link:hover .category-badge {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+/* Active category */
+.active-category {
+    background-color: #e9ecef;
+    font-weight: bold;
+    color: #0d6efd !important;
+}
+
+
+
+</style>
 
         <!-- Main Product Section -->
         <div class="col-md-9">

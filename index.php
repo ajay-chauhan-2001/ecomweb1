@@ -9,68 +9,81 @@ $featuredProducts = getAllProducts();
 <!-- Hero Slider Section -->
 <!-- ====== HERO SLIDER START ====== -->
 <section class="hero-slider" style="overflow: hidden;">
-    <div id="mainSlider" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3000">
-        
-        <!-- Indicators -->
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="0" class="active" aria-current="true"></button>
-            <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="2"></button>
+  <div id="mainSlider" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3000">
+
+    <!-- Indicators -->
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="0" class="active" aria-current="true"></button>
+      <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="2"></button>
+    </div>
+
+    <!-- Slides -->
+    <div class="carousel-inner">
+
+      <!-- Slide 1 -->
+      <div class="carousel-item active" style="background: url('assets/images/products/download%20(1).jfif') center center/cover no-repeat; height: 80vh;">
+        <div class="container h-100 d-flex flex-column justify-content-center align-items-center text-center text-white">
+          <div class="slider-text">
+            <h1 class="display-4 fw-bold animate__animated animate__backInDown">Elegant Home Decor</h1>
+            <p class="lead animate__animated animate__fadeInBottomRight animate__delay-1s">Bring style and warmth to your living spaces.</p>
+          </div>
         </div>
+      </div>
 
-        <!-- Slides -->
-        <div class="carousel-inner">
-
-            <!-- Slide 1 -->
-            <div class="carousel-item active" style="background: url('assets/images/products/download%20(1).jfif') center center/cover no-repeat; height: 100vh;">
-                <div class="container h-100 d-flex flex-column justify-content-center align-items-center text-center text-white">
-                    <div class="slider-text">
-                        <h1 class="display-4 fw-bold animate__animated animate__fadeInDown animate__delay-1s">Elegant Home Decor</h1>
-                        <p class="lead animate__animated animate__fadeInUp animate__delay-2s">Bring style and warmth to your living spaces.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 2 -->
-            <div class="carousel-item" style="background: url('assets/images/products/Wonderful%20decorations%20😍😍😍.jfif') center center/cover no-repeat; height: 100vh;">
-                <div class="container h-100 d-flex flex-column justify-content-center align-items-center text-center text-white">
-                    <div class="slider-text">
-                        <h1 class="display-4 fw-bold animate__animated animate__fadeInLeft animate__delay-1s">Wonderful Decorations</h1>
-                        <p class="lead animate__animated animate__fadeInRight animate__delay-2s">Turn every corner into a masterpiece.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 3 -->
-            <div class="carousel-item" style="background: url('assets/images/products/download%20(3)11.jfif') center center/cover no-repeat; height: 100vh;">
-                <div class="container h-100 d-flex flex-column justify-content-center align-items-center text-center text-white">
-                    <div class="slider-text">
-                        <h1 class="display-4 fw-bold animate__animated animate__zoomIn animate__delay-1s">Discover New Collections</h1>
-                        <p class="lead animate__animated animate__fadeInUp animate__delay-2s">Fresh styles for a fresh new season.</p>
-                    </div>
-                </div>
-            </div>
-
+      <!-- Slide 2 -->
+      <div class="carousel-item" style="background: url('assets/images/products/Wonderful%20decorations%20😍😍😍.jfif') center center/cover no-repeat; height: 80vh;">
+        <div class="container h-100 d-flex flex-column justify-content-center align-items-center text-center text-white">
+          <div class="slider-text">
+            <h1 class="display-4 fw-bold animate__animated animate__lightSpeedInLeft">Wonderful Decorations</h1>
+            <p class="lead animate__animated animate__zoomIn animate__delay-1s">Turn every corner into a masterpiece.</p>
+          </div>
         </div>
+      </div>
 
-        <!-- Controls -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#mainSlider" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#mainSlider" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
+      <!-- Slide 3 -->
+      <div class="carousel-item" style="background: url('assets/images/products/download%20(3)11.jfif') center center/cover no-repeat; height: 80vh;">
+        <div class="container h-100 d-flex flex-column justify-content-center align-items-center text-center text-white">
+          <div class="slider-text">
+            <h1 class="display-4 fw-bold animate__animated animate__rollIn">Discover New Collections</h1>
+            <p class="lead animate__animated animate__fadeInUpBig animate__delay-1s">Fresh styles for a fresh new season.</p>
+          </div>
+        </div>
+      </div>
 
     </div>
+
+    <!-- Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainSlider" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainSlider" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+
+  </div>
 </section>
+
+<script>
+  const slider = document.querySelector('#mainSlider');
+  const bsCarousel = new bootstrap.Carousel(slider, {
+    interval: 2000,
+    ride: 'carousel',
+    pause: false,
+    wrap: true
+  });
+</script>
 
 <!-- ====== HERO SLIDER END ====== -->
 
 
 <!-- Categories Section -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
 <!-- Swiper CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
