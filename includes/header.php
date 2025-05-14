@@ -1,7 +1,7 @@
 <?php
 // Start the session at the VERY BEGINNING before any output
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    // session_start();
 }
 
 require_once 'functions.php';
@@ -31,33 +31,7 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - FurniCraft' : 'FurniCraft';
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="css/style.css">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Categories Section -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Swiper CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-
-<!-- Swiper CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
-<!-- Swiper CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-
-
-<!-- Font Awesome (for icons) -->
-<script src="https://kit.fontawesome.com/your-fontawesome-kit-code.js" crossorigin="anonymous"></script>
-
-<!-- AOS CSS and JS -->
-<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <style>
         #globalPreloader {
             position: fixed;
@@ -142,7 +116,6 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - FurniCraft' : 'FurniCraft';
     <?php endforeach; ?>
 </ul>
 
-
                 <!-- Right side icons/buttons -->
                 <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
                     <a href="cart.php" class="btn btn-warning position-relative">
@@ -176,35 +149,31 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - FurniCraft' : 'FurniCraft';
     </nav>
 </header>
 
+<!-- Flash Messages Section -->
+<div class="container mt-3">
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
 
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+</div>
 
-    <!-- Flash Messages Section -->
-    <div class="container mt-3">
-        <?php if (isset($_SESSION['success'])): ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <?php endif; ?>
-
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <?php endif; ?>
-    </div>
-
- <!-- ✅ Preloader (place this first) -->
- <div id="globalPreloader">
+<!-- ✅ Preloader -->
+<div id="globalPreloader">
     <div class="preloader-content text-center">
-      <img src="assets/images/header.jpeg" alt="Loading...">
-      
+        <img src="assets/images/header.jpeg" alt="Loading...">
     </div>
-  </div>
+</div>
 
-
-  <style>
+<style>
 #globalPreloader {
   position: fixed;
   inset: 0;
@@ -250,7 +219,6 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - FurniCraft' : 'FurniCraft';
 }
 </style>
 
-
 <script>
 window.addEventListener('load', function () {
   const preloader = document.getElementById('globalPreloader');
@@ -261,17 +229,15 @@ window.addEventListener('load', function () {
   }, 600); // Remove from DOM after fade
 });
 </script>
-
 <!-- Preloader End -->
 
-    <!-- Main Content Start -->
-    <main class="container py-4" style="max-width: 100%;">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+<!-- Main Content Start -->
+<main class="container py-4" style="max-width: 100%;">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 function updateCartCount() {
     $.ajax({
-        url: 'ajax/get_cart_count.php', // <-- your correct path
+        url: 'ajax/get_cart_count.php',
         method: 'GET',
         dataType: 'json',
         success: function(response) {
@@ -282,6 +248,6 @@ function updateCartCount() {
     });
 }
 $(document).ready(function() {
-    updateCartCount(); // load cart count on every page
+    updateCartCount();
 });
 </script>

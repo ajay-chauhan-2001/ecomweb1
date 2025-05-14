@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
 <!-- Swiper CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
 <!-- Swiper CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
@@ -464,23 +464,6 @@
   }
   
 
-  .swiper-button-next,
-.swiper-button-prev {
-  color: #000; /* make them visible */
-  z-index: 10;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.swiper-button-next {
-  right: 0;
-}
-
-.swiper-button-prev {
-  left: 0;
-}
-
-
 </style>
 
 <body>
@@ -600,51 +583,6 @@ $featuredProducts = getAllProducts();
 
 
 <!-- Categories Section -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
-<!-- Swiper CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-
-<!-- Swiper CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
-
-<style>
-  .swiper {
-    width: 100%;
-    padding-top: 30px;
-    padding-bottom: 30px;
-  }
-  .swiper-slide {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-  }
-  .category-card {
-    width: 100%;
-    max-width: 350px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-  }
-  .category-card:hover {
-    transform: translateY(-5px);
-  }
-  .category-card img {
-    height: 300px;
-    object-fit: cover;
-  }
-  .card-img-overlay {
-    background: rgba(0, 0, 0, 0.4);
-    transition: background 0.3s;
-  }
-  .category-card:hover .card-img-overlay {
-    background: rgba(0, 0, 0, 0.6);
-  }
-</style>
-
-
 <section class="categories py-5 bg-light">
   <div class="container">
     <h2 class="text-center mb-4">Shop by Category</h2>
@@ -683,35 +621,6 @@ $featuredProducts = getAllProducts();
     </div>
   </div>
 </section>
-
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-<script>
-  const categorySwiper = new Swiper(".categorySwiper", {
-    loop: true,
-    autoplay: {
-      delay: 2500,
-      disableOnInteraction: false,
-      pauseOnMouseEnter: true
-    },
-    spaceBetween: 30,
-    slidesPerView: 1,
-    breakpoints: {
-      576: { slidesPerView: 2 },
-      768: { slidesPerView: 3 },
-      992: { slidesPerView: 4 },
-      1200: { slidesPerView: 5 }
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev"
-    },
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true
-    }
-  });
-</script>
 
 
 <!-- New Products Section -->
@@ -1045,7 +954,12 @@ $featuredProducts = getAllProducts();
   </div>
 </section>
 
+
+
+
+    
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 <!-- Font Awesome (for icons) -->
@@ -1054,6 +968,14 @@ $featuredProducts = getAllProducts();
 
 <script>
   const slider = document.querySelector('#mainSlider');
+  const bsCarousel = new bootstrap.Carousel(slider, {
+    interval: 2000,
+    ride: 'carousel',
+    pause: false,
+    wrap: true
+  });
+
+
 
 //   Swiper Continuous Scroll Init
 
@@ -1074,11 +996,12 @@ $featuredProducts = getAllProducts();
 
 //   cetgory section
 
-new Swiper(".categorySwiper", {
+const categorySwiper = new Swiper(".categorySwiper", {
     loop: true,
     autoplay: {
       delay: 2500,
-      disableOnInteraction: false
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true
     },
     spaceBetween: 30,
     slidesPerView: 1,
@@ -1098,39 +1021,38 @@ new Swiper(".categorySwiper", {
     }
   });
 
-
-//   (function () {
-//   const swiper = new Swiper(".mySwiper", {
-//     effect: "coverflow",
-//     grabCursor: true,
-//     centeredSlides: true,
-//     loop: true,
-//     autoplay: {
-//       delay: 2000,
-//       disableOnInteraction: false,
-//     },
-//     coverflowEffect: {
-//       rotate: 50,
-//       stretch: 0,
-//       depth: 100,
-//       modifier: 1,
-//       slideShadows: true,
-//     },
-//     pagination: {
-//       el: ".swiper-pagination",
-//       clickable: true,
-//     },
-//     navigation: {
-//       nextEl: ".swiper-button-next",
-//       prevEl: ".swiper-button-prev",
-//     },
-//     breakpoints: {
-//       0: { slidesPerView: 2, spaceBetween: 10 },
-//       768: { slidesPerView: 2, spaceBetween: 20 },
-//       992: { slidesPerView: 3, spaceBetween: 30 }
-//     }
-//   });
-// })();
+  (function () {
+  const swiper = new Swiper(".mySwiper", {
+    effect: "coverflow",
+    grabCursor: true,
+    centeredSlides: true,
+    loop: true,
+    autoplay: {
+      delay: 2000,
+      disableOnInteraction: false,
+    },
+    coverflowEffect: {
+      rotate: 50,
+      stretch: 0,
+      depth: 100,
+      modifier: 1,
+      slideShadows: true,
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    breakpoints: {
+      0: { slidesPerView: 2, spaceBetween: 10 },
+      768: { slidesPerView: 2, spaceBetween: 20 },
+      992: { slidesPerView: 3, spaceBetween: 30 }
+    }
+  });
+})();
 
 AOS.init({
     duration: 800, // animation duration
@@ -1260,9 +1182,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
-
-  // 
-    
+  
 
 </script>
 </body>

@@ -2,15 +2,13 @@
 <footer class="footer-woodmart-furniture pt-5 pb-3 mt-5">
   <div class="container">
     <div class="row gy-4">
-      
+
       <!-- About/Logo -->
       <div class="col-md-3">
         <img src="assets/images/footer_logo.png" alt="FurniCraft Logo" style="width:180px;" class="mb-2">
         <p class="footer-desc">Premium furniture & decor for modern living. Crafted with care, delivered with pride.</p>
-        
       </div>
-      
-      
+
       <!-- Useful Links -->
       <div class="col-md-2">
         <h6 class="footer-title">Useful Links</h6>
@@ -21,7 +19,7 @@
           <li><a href="contact.php">Contact</a></li>
         </ul>
       </div>
-      
+
       <!-- Customer Service -->
       <div class="col-md-2">
         <h6 class="footer-title">Customer Service</h6>
@@ -32,7 +30,7 @@
           <li><a href="#">Privacy Policy</a></li>
         </ul>
       </div>
-      
+
       <!-- Our Stores -->
       <div class="col-md-2">
         <h6 class="footer-title">Our Stores</h6>
@@ -44,85 +42,72 @@
           <li>Chicago</li>
         </ul>
       </div>
-      
+
       <!-- Newsletter & Social -->
       <div class="col-md-3">
-      <h5 class="mb-3 fw-bold text-warning">Follow Us</h5>
-      <p>
-  <a href="mailto:info@furnicraft.com" class="text-decoration-none text-light">
-    <i class="fas fa-envelope me-2 text-light"></i> info@furnicraft.com
-  </a>
-</p>
-<p>
-  <a href="tel:+919925751501" class="text-decoration-none text-light">
-    <i class="fas fa-phone me-2 text-light"></i> +91 9925751501
-  </a>
-</p>
-    <div class="footer-social-icons d-flex mt-3 gap-3">
-        <a href="https://wa.me/9925751501" class="social-icon whatsapp" target="_blank" title="WhatsApp">
+        <h5 class="mb-3 fw-bold text-warning">Follow Us</h5>
+        <p>
+          <a href="mailto:info@furnicraft.com" class="text-decoration-none text-light">
+            <i class="fas fa-envelope me-2 text-light"></i> info@furnicraft.com
+          </a>
+        </p>
+        <p>
+          <a href="tel:+919925751501" class="text-decoration-none text-light">
+            <i class="fas fa-phone me-2 text-light"></i> +91 9925751501
+          </a>
+        </p>
+        <div class="footer-social-icons d-flex mt-3 gap-3">
+          <a href="https://wa.me/9925751501" class="social-icon whatsapp" target="_blank" rel="noopener noreferrer" title="WhatsApp">
             <i class="fab fa-whatsapp"></i>
-        </a>
-        <a href="https://www.facebook.com/people/TechTurtle/61564013990737/" class="social-icon facebook" target="_blank" title="Facebook">
+          </a>
+          <a href="https://www.facebook.com/people/TechTurtle/61564013990737/" class="social-icon facebook" target="_blank" rel="noopener noreferrer" title="Facebook">
             <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="https://www.instagram.com/techturtlesolution/" class="social-icon instagram" target="_blank" title="Instagram">
+          </a>
+          <a href="https://www.instagram.com/techturtlesolution/" class="social-icon instagram" target="_blank" rel="noopener noreferrer" title="Instagram">
             <i class="fab fa-instagram"></i>
-        </a>
-    </div>
+          </a>
+        </div>
       </div>
 
-
-
     </div>
 
+    <!-- Footer Bottom -->
     <div class="d-flex justify-content-between align-items-center flex-wrap small text-muted mt-4 pt-3 border-top">
-  
-  <!-- Payment Methods (left) -->
-  <div class="d-flex align-items-center mb-2 mb-md-0">
-    <span class="me-3 fw-bold">We Accept:</span>
-    <div class="payment-icons">
-      <img src="assets/images/payment/upi.jfif" alt="UPI" style="height:24px; margin-right:8px;">
-      <img src="assets/images/payment/gpay.jfif" alt="GPay" style="height:24px; margin-right:8px;">
-      <img src="assets/images/payment/Mastercard.jfif" alt="Mastercard" style="height:24px; margin-right:8px;">
-      <img src="assets/images/payment/Visa.jfif" alt="Visa" style="height:24px; margin-right:8px;">
-      <img src="assets/images/payment/paypal.jfif" alt="Paypal" style="height:24px;">
+      <!-- Payment Methods -->
+      <div class="d-flex align-items-center mb-2 mb-md-0">
+        <span class="me-3 fw-bold">We Accept:</span>
+        <div class="payment-icons">
+          <img src="assets/images/payment/upi.jfif" alt="UPI" style="height:24px; margin-right:8px;">
+          <img src="assets/images/payment/gpay.jfif" alt="Google Pay" style="height:24px; margin-right:8px;">
+          <img src="assets/images/payment/Mastercard.jfif" alt="Mastercard" style="height:24px; margin-right:8px;">
+          <img src="assets/images/payment/Visa.jfif" alt="Visa" style="height:24px; margin-right:8px;">
+          <img src="assets/images/payment/paypal.jfif" alt="Paypal" style="height:24px;">
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="text-muted text-center text-md-end">
+        &copy; 2025 FurniCraft. All rights reserved.
+      </div>
     </div>
-  </div>
-
-  <!-- Copyright -->
-  <div class="text-muted text-center text-md-end">
-    &copy; 2025 FurniCraft. All rights reserved.
-  </div>
-
-</div>
-
-
   </div>
 </footer>
 
 <!-- Back to Top Button -->
-<button id="backToTop" class="btn btn-primary" style="position: fixed; bottom: 20px; right: 20px; opacity: 0; visibility: hidden; transition: all 0.4s ease; border-radius: 50%;">
-    <i class="fas fa-arrow-up"></i>
+<button id="backToTop" class="btn btn-primary" aria-label="Back to top" style="position: fixed; bottom: 20px; right: 20px; opacity: 0; visibility: hidden; transition: all 0.4s ease; border-radius: 50%;">
+  <i class="fas fa-arrow-up"></i>
 </button>
 
 <!-- Scripts -->
-<!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-<script src="js/script.js"></script>
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> -->
+
 <script>
-  AOS.init({
-    duration: 1000,
-    once: true,
-  });
+  AOS.init({ duration: 1000, once: true });
 
   const backToTopButton = document.getElementById('backToTop');
   window.addEventListener('scroll', () => {
@@ -135,18 +120,14 @@
     }
   });
   backToTopButton.addEventListener('click', () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 </script>
-
 
 <!-- Footer Styles -->
 <style>
 .footer-woodmart-furniture {
-  background:rgb(0, 7, 14);
+  background: rgb(0, 7, 14);
   color: #e0e6f7;
   border-radius: 18px 18px 0 0;
 }
@@ -193,7 +174,7 @@
 }
 
 /* Social Icons */
-.footer-social {
+.footer-social-icons {
   display: flex;
   gap: 12px;
   margin-top: 15px;
@@ -218,13 +199,9 @@
   background: #ffd803;
   color: #232946;
 }
-/* Specific platform colors */
-.social-icon.whatsapp {
-  background: #25D366;
-}
-.social-icon.facebook {
-  background: #3b5998;
-}
+/* Platform Colors */
+.social-icon.whatsapp { background: #25D366; }
+.social-icon.facebook { background: #3b5998; }
 .social-icon.instagram {
   background: radial-gradient(circle at 30% 30%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
 }
