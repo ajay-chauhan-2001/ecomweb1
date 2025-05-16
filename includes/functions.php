@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
+  
 
 if (session_status() == PHP_SESSION_NONE) {
-    // session_start();
 }
 
 // -------------------------------
@@ -334,12 +334,15 @@ function isLoggedIn() {
 }
 
 // Get current logged in user
+
 function getCurrentUser() {
-    if (isLoggedIn()) {
-        return [
-            'id' => $_SESSION['user_id'],
-            'name' => $_SESSION['user_name'] ?? 'User'
-        ];
+    if (isset($_SESSION['user_id'])) {
+        global $conn;
+        $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->bind_param("i", $_SESSION['user_id']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
     }
     return null;
 }

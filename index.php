@@ -1,3 +1,10 @@
+<?php
+$pageTitle = 'Home';
+require_once 'includes/header.php';
+
+// Get featured products
+$featuredProducts = getAllProducts();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -481,16 +488,28 @@
 }
 
 
+.gallery-section .swiper-slide {
+  width: auto;
+}
+
+.gallery-img-wrapper {
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.gallery-img-wrapper img {
+  transition: transform 0.4s ease;
+}
+
+.gallery-img-wrapper:hover img {
+  transform: scale(1.05);
+}
+
+
 </style>
 
 <body>
-<?php
-$pageTitle = 'Home';
-require_once 'includes/header.php';
 
-// Get featured products
-$featuredProducts = getAllProducts();
-?>
     
     <!-- Hero Slider Section -->
 <!-- ====== HERO SLIDER START ====== -->
@@ -498,11 +517,11 @@ $featuredProducts = getAllProducts();
   <div id="mainSlider" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3000">
 
     <!-- Indicators -->
-    <div class="carousel-indicators">
+    <!-- <div class="carousel-indicators">
       <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="0" class="active" aria-current="true"></button>
       <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="1"></button>
       <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="2"></button>
-    </div>
+    </div> -->
 
     <!-- Slides -->
     <div class="carousel-inner">
@@ -665,42 +684,42 @@ $featuredProducts = getAllProducts();
 
 <!-- category section -->
 <section class="categories py-5 bg-light">
-  <div class="container">
-    <h2 class="text-center mb-4">Shop by Category</h2>
+    <div class="container">
+      <h2 class="text-center mb-4">Shop by Category</h2>
 
-    <!-- Swiper Container -->
-    <div class="swiper categorySwiper">
-      <div class="swiper-wrapper">
-        <?php 
-        $categories = getAllCategories();
-        foreach ($categories as $category): 
-            $productCount = getProductCountByCategory($category['id']);
-        ?>
-        <div class="swiper-slide">
-          <div class="card category-card h-100">
-            <a href="shop.php?category=<?php echo htmlspecialchars($category['name']); ?>" class="text-decoration-none">
-              <img src="assets/images/categories/<?php echo htmlspecialchars($category['image']); ?>" 
-                   class="card-img" 
-                   alt="<?php echo htmlspecialchars($category['name']); ?>">
-              <div class="card-img-overlay d-flex align-items-center justify-content-center">
-                <i class="fas fa-arrow-right text-white fa-2x"></i>
+      <!-- Swiper Container -->
+      <div class="swiper categorySwiper">
+        <div class="swiper-wrapper">
+            <?php 
+            $categories = getAllCategories();
+            foreach ($categories as $category): 
+                $productCount = getProductCountByCategory($category['id']);
+            ?>
+            <div class="swiper-slide">
+              <div class="card category-card h-100">
+                <a href="shop.php?category=<?php echo htmlspecialchars($category['name']); ?>" class="text-decoration-none">
+                  <img src="assets/images/categories/<?php echo htmlspecialchars($category['image']); ?>" 
+                      class="card-img" 
+                      alt="<?php echo htmlspecialchars($category['name']); ?>">
+                  <div class="card-img-overlay d-flex align-items-center justify-content-center">
+                    <i class="fas fa-arrow-right text-white fa-2x"></i>
+                  </div>
+                </a>
+                <div class="card-footer bg-white text-center">
+                  <h3 class="h5 mb-1"><?php echo htmlspecialchars($category['name']); ?></h3>
+                  <p class="text-muted mb-0"><?php echo $productCount; ?> Products</p>
+                </div>
               </div>
-            </a>
-            <div class="card-footer bg-white text-center">
-              <h3 class="h5 mb-1"><?php echo htmlspecialchars($category['name']); ?></h3>
-              <p class="text-muted mb-0"><?php echo $productCount; ?> Products</p>
             </div>
-          </div>
+            <?php endforeach; ?>
         </div>
-        <?php endforeach; ?>
-      </div>
 
-      <!-- Swiper Controls -->
-      <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-pagination mt-3"></div>
+        <!-- Swiper Controls -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <!-- <div class="swiper-pagination mt-3"></div> -->
+      </div>
     </div>
-  </div>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -962,59 +981,228 @@ $featuredProducts = getAllProducts();
     </div>
 </section>
 
+<!-- Customer Reviews  -->
+<style>
+.review-card {
+  transition: all 0.3s ease;
+}
+
+/* Hover animations */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+@keyframes rotate {
+  0% { transform: rotate(0); }
+  100% { transform: rotate(1deg); }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+@keyframes zoom {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.hover-animate-1:hover { animation: bounce 0.6s ease; }
+.hover-animate-2:hover { animation: pulse 0.6s ease; }
+.hover-animate-3:hover { animation: rotate 0.6s ease; }
+.hover-animate-4:hover { animation: shake 0.6s ease; }
+.hover-animate-5:hover { animation: zoom 0.6s ease; }
+
+</style>
+
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+<!-- Customer Reviews Section -->
 <section class="customer-reviews py-5">
   <div class="container">
-    <h2 class="text-center mb-5" data-aos="fade-zoom-in" data-aos-easing="ease-in-back" data-aos-delay="300" data-aos-offset="0">Customer Reviews</h2>
-    <div class="row g-4">
-      
-      <!-- Review 1 -->
-      <div class="col-md-4" data-aos="flip-up" data-aos-duration="1200">
-        <div class="review-card p-4 shadow-sm h-100 text-center hover-scale">
-          <div class="stars mb-3">
-            <i class="fas fa-star text-warning"></i>
-            <i class="fas fa-star text-warning"></i>
-            <i class="fas fa-star text-warning"></i>
-            <i class="fas fa-star text-warning"></i>
-            <i class="far fa-star text-warning"></i>
+  <h2 class="text-center mb-4"
+    data-aos="fade-up"
+    data-aos-duration="1200"
+    data-aos-easing="ease-in-out"
+    data-aos-once="true">
+  Customer Reviews
+</h2>
+
+
+    <div class="swiper reviewSwiper">
+      <div class="swiper-wrapper">
+        <?php
+        $reviews = [
+          ["name" => "Sarah L.", "rating" => 4, "text" => "Absolutely stunning craftsmanship! Highly recommend FurniCraft."],
+          ["name" => "Daniel K.", "rating" => 5, "text" => "Amazing quality and great custom design options."],
+          ["name" => "Priya S.", "rating" => 3, "text" => "Fast delivery and excellent support. Will buy again!"],
+          ["name" => "John M.", "rating" => 5, "text" => "Outstanding experience from order to delivery."],
+          ["name" => "Emily T.", "rating" => 4, "text" => "Love the finish and attention to detail!"],
+        ];
+
+        // Duplicate reviews to fill continuous loop
+        $loopReviews = array_merge($reviews, $reviews);
+        $hoverAnimations = ['hover-animate-1', 'hover-animate-2', 'hover-animate-3', 'hover-animate-4', 'hover-animate-5'];
+        $i = 0;
+
+        foreach ($loopReviews as $review):
+          $hoverClass = $hoverAnimations[$i % count($hoverAnimations)];
+        ?>
+          <div class="swiper-slide">
+            <div class="review-card <?= $hoverClass ?> p-4 bg-white shadow rounded text-center h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="stars mb-3">
+                  <?php for ($s = 1; $s <= 5; $s++): ?>
+                    <i class="fa<?= $s <= $review['rating'] ? 's' : 'r' ?> fa-star text-warning"></i>
+                  <?php endfor; ?>
+                </div>
+                <p class="text-muted fst-italic">"<?= htmlspecialchars($review['text']) ?>"</p>
+              </div>
+              <h6 class="mt-3 fw-bold text-primary">— <?= htmlspecialchars($review['name']) ?></h6>
+            </div>
           </div>
-          <p class="text-muted">"Absolutely stunning craftsmanship! Highly recommend FurniCraft."</p>
-          <h5 class="mt-3">- Sarah L.</h5>
-        </div>
+        <?php
+        $i++;
+        endforeach;
+        ?>
       </div>
 
-      <!-- Review 2 -->
-      <div class="col-md-4" data-aos="slide-left" data-aos-duration="1300">
-        <div class="review-card p-4 shadow-sm h-100 text-center hover-scale">
-          <div class="stars mb-3">
-            <i class="fas fa-star text-warning"></i>
-            <i class="fas fa-star text-warning"></i>
-            <i class="fas fa-star text-warning"></i>
-            <i class="fas fa-star text-warning"></i>
-            <i class="fas fa-star text-warning"></i>
-          </div>
-          <p class="text-muted">"Amazing quality and great custom design options."</p>
-          <h5 class="mt-3">- Daniel K.</h5>
-        </div>
-      </div>
-
-      <!-- Review 3 -->
-      <div class="col-md-4" data-aos="zoom-in-left" data-aos-duration="1400">
-        <div class="review-card p-4 shadow-sm h-100 text-center hover-scale">
-          <div class="stars mb-3">
-            <i class="fas fa-star text-warning"></i>
-            <i class="fas fa-star text-warning"></i>
-            <i class="fas fa-star text-warning"></i>
-            <i class="far fa-star text-warning"></i>
-            <i class="far fa-star text-warning"></i>
-          </div>
-          <p class="text-muted">"Fast delivery and excellent support. Will buy again!"</p>
-          <h5 class="mt-3">- Priya S.</h5>
-        </div>
-      </div>
-
+      <!-- Controls -->
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <!--<div class="swiper-pagination mt-3"></div>-->
     </div>
   </div>
 </section>
+
+
+
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<!-- AOS -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+
+<script>
+AOS.init({ duration: 800, once: true });
+
+const reviewSwiper = new Swiper(".reviewSwiper", {
+  loop: true,
+  speed: 900,
+  autoplay: {
+    delay: 2500,
+    disableOnInteraction: false,
+    pauseOnMouseEnter: true,
+  },
+  spaceBetween: 30,
+  slidesPerView: 1,
+  breakpoints: {
+    768: { slidesPerView: 2 },
+    992: { slidesPerView: 3 }
+  },
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev"
+  },
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true
+  }
+});
+</script>
+
+
+
+<!-- Gallery Section -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+<style>
+  .gallery-img-wrapper {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  .gallery-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #000;
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+  }
+</style>
+
+<section class="gallery-section py-5 bg-white">
+  <div class="container">
+    <h2 class="text-center mb-3">Our Gallery</h2>
+    <div class="swiper gallerySwiper">
+      <div class="swiper-wrapper">
+        <?php
+        $galleryImages = glob("assets/images/categories/*.{jpg,jpeg,png,jfif,webp}", GLOB_BRACE);
+        foreach ($galleryImages as $imgPath): ?>
+          <div class="swiper-slide">
+            <div class="gallery-img-wrapper">
+              <img src="<?= $imgPath ?>" class="img-fluid" alt="Gallery Image">
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+
+      <!-- Navigation -->
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+
+      <!-- Pagination (optional) -->
+      <!-- <div class="swiper-pagination mt-3"></div> -->
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+  const gallerySwiper = new Swiper(".gallerySwiper", {
+    loop: true,
+    autoplay: {
+      delay: 2500,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true
+    },
+    spaceBetween: 30,
+    slidesPerView: 1,
+    breakpoints: {
+      576: { slidesPerView: 2 },
+      768: { slidesPerView: 3 },
+      992: { slidesPerView: 4 },
+      1200: { slidesPerView: 5 }
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev"
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true
+    }
+  });
+</script>
+
 
 <!-- Make in India Section -->
 <section class="py-5 bg-light text-center" data-aos="flip-left" data-aos-easing="ease-out-cubic" data-aos-duration="1500">
@@ -1118,38 +1306,6 @@ new Swiper(".categorySwiper", {
   });
 
 
-//   (function () {
-//   const swiper = new Swiper(".mySwiper", {
-//     effect: "coverflow",
-//     grabCursor: true,
-//     centeredSlides: true,
-//     loop: true,
-//     autoplay: {
-//       delay: 2000,
-//       disableOnInteraction: false,
-//     },
-//     coverflowEffect: {
-//       rotate: 50,
-//       stretch: 0,
-//       depth: 100,
-//       modifier: 1,
-//       slideShadows: true,
-//     },
-//     pagination: {
-//       el: ".swiper-pagination",
-//       clickable: true,
-//     },
-//     navigation: {
-//       nextEl: ".swiper-button-next",
-//       prevEl: ".swiper-button-prev",
-//     },
-//     breakpoints: {
-//       0: { slidesPerView: 2, spaceBetween: 10 },
-//       768: { slidesPerView: 2, spaceBetween: 20 },
-//       992: { slidesPerView: 3, spaceBetween: 30 }
-//     }
-//   });
-// })();
 
 AOS.init({
     duration: 800, // animation duration
@@ -1280,7 +1436,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // 
+//   // gallery
+
+//   document.addEventListener("DOMContentLoaded", function () {
+//   new Swiper(".gallerySwiper", {
+//     loop: true,
+//     spaceBetween: 20,
+//     autoplay: {
+//       delay: 2000,
+//       disableOnInteraction: false
+//     },
+//     slidesPerView: 1,
+//     breakpoints: {
+//       576: { slidesPerView: 2 },
+//       768: { slidesPerView: 3 },
+//       992: { slidesPerView: 4 }
+//     },
+//     navigation: {
+//       nextEl: ".swiper-button-next",
+//       prevEl: ".swiper-button-prev"
+//     },
+//     pagination: {
+//       el: ".swiper-pagination",
+//       clickable: true
+//     }
+//   });
+// });
+
     
 
 </script>

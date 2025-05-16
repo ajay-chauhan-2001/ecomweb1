@@ -1,7 +1,8 @@
 <?php
+ob_start(); 
 // Start the session at the VERY BEGINNING before any output
 if (session_status() === PHP_SESSION_NONE) {
-    // session_start();
+    session_start();
 }
 
 require_once 'functions.php';
@@ -130,19 +131,22 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - FurniCraft' : 'FurniCraft';
 
                     <?php if (isLoggedIn()): ?>
                         <div class="dropdown">
-                            <button class="btn btn-light dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user-circle me-1"></i> <?php echo htmlspecialchars(getCurrentUser()['name']); ?>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                                <li><a class="dropdown-item" href="orders.php">My Orders</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                            </ul>
-                        </div>
-                    <?php else: ?>
-                        <a href="login.php" class="btn btn-light fw-bold">Login</a>
-                    <?php endif; ?>
+    <button class="btn btn-light dropdown-toggle fw-bold d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-user-circle me-2"></i>
+        <?php echo htmlspecialchars(getCurrentUser()['name']); ?>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+        <li><a class="dropdown-item" href="profile.php"><i class="bi bi-person me-2"></i>Profile</a></li>
+        <li><a class="dropdown-item" href="orders_history.php"><i class="bi bi-bag me-2"></i>My Orders</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+    </ul>
+</div>
+
+<?php else: ?>
+    <a href="login.php" class="btn btn-light fw-bold">Login</a>
+<?php endif; ?>
+
                 </div>
             </div>
         </div>

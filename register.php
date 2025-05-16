@@ -1,7 +1,6 @@
 <?php
-require_once 'config/database.php'; // This must return a mysqli connection
+require_once 'config/database.php';
 
-// Handle registration form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'] ?? '';
     $email = $_POST['email'] ?? '';
@@ -12,29 +11,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $city = $_POST['city'] ?? '';
     $state = $_POST['state'] ?? '';
     $zip_code = $_POST['zip_code'] ?? '';
+    $profileImage = $_FILES['image'] ?? null;
+    $profileImageName = 'default.png'; // Default image
 
-    // Basic validation
     $errors = [];
 
-    if (empty($name)) {
-        $errors[] = 'Name is required';
-    }
-
+    if (empty($name)) $errors[] = 'Name is required';
     if (empty($email)) {
         $errors[] = 'Email is required';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = 'Invalid email format';
     }
-
     if (empty($password)) {
         $errors[] = 'Password is required';
     } elseif (strlen($password) < 6) {
-        $errors[] = 'Password must be at least 6 characters long';
+        $errors[] = 'Password must be at least 6 characters';
     }
-
-    if ($password !== $confirmPassword) {
-        $errors[] = 'Passwords do not match';
-    }
+    if ($password !== $confirmPassword) $errors[] = 'Passwords do not match';
 
     if (empty($phone)) {
         $errors[] = 'Phone number is required';
@@ -42,31 +35,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Phone number must be exactly 10 digits';
     }
 
-    if (empty($address)) {
-        $errors[] = 'Address is required';
-    }
+    if (empty($address)) $errors[] = 'Address is required';
+    if (empty($city)) $errors[] = 'City is required';
+    if (empty($state)) $errors[] = 'State is required';
+    if (empty($zip_code)) $errors[] = 'ZIP code is required';
 
-    if (empty($city)) {
-        $errors[] = 'City is required';
-    }
-
-    if (empty($state)) {
-        $errors[] = 'State is required';
-    }
-
-    if (empty($zip_code)) {
-        $errors[] = 'ZIP code is required';
-    }
-
-    // If no errors, proceed with registration
     if (empty($errors)) {
-        $conn = getDBConnection(); // mysqli connection
+        $conn = getDBConnection();
+        if (!$conn) die('DB connection failed: ' . mysqli_connect_error());
 
-        if (!$conn) {
-            die('Database connection failed: ' . mysqli_connect_error());
-        }
-
-        // Check if email already exists
         $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
         if ($stmt) {
             $stmt->bind_param('s', $email);
@@ -76,44 +53,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($stmt->num_rows > 0) {
                 $errors[] = 'Email already registered';
             } else {
-                // Hash the password
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                // ✅ Handle image upload
+                if ($profileImage && $profileImage['error'] === UPLOAD_ERR_OK) {
+                    $uploadDir = 'assets/images/avatar/';
+                    if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
-                // Insert new user
-                $stmt_insert = $conn->prepare("INSERT INTO users (name, email, password, phone, address, city, state, zip_code, role, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'user', 'active')");
-                
-                if ($stmt_insert) {
-                    $stmt_insert->bind_param(
-                        'ssssssss',
-                        $name,
-                        $email,
-                        $hashedPassword,
-                        $phone,
-                        $address,
-                        $city,
-                        $state,
-                        $zip_code
-                    );
+                    $ext = strtolower(pathinfo($profileImage['name'], PATHINFO_EXTENSION));
+                    $customFileName = 'user_' . time() . '.' . $ext;
+                    $uploadPath = $uploadDir . $customFileName;
 
-                    if ($stmt_insert->execute()) {
-                        // Registration successful
-                        header('Location: login.php?registered=1');
-                        exit;
+                    if (move_uploaded_file($profileImage['tmp_name'], $uploadPath)) {
+                        $profileImageName = $customFileName;
                     } else {
-                        $errors[] = 'Registration failed. Please try again.';
+                        $errors[] = 'Image upload failed. Using default.';
                     }
+                }
 
-                    $stmt_insert->close();
-                } else {
-                    $errors[] = 'Database error: ' . $conn->error;
+                if (empty($errors)) {
+                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                    $stmt_insert = $conn->prepare("INSERT INTO users 
+                        (name, email, password, phone, address, city, state, zip_code, image, role, status) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'user', 'active')");
+                    if ($stmt_insert) {
+                        $stmt_insert->bind_param(
+                            'sssssssss',
+                            $name,
+                            $email,
+                            $hashedPassword,
+                            $phone,
+                            $address,
+                            $city,
+                            $state,
+                            $zip_code,
+                            $profileImageName
+                        );
+
+                        if ($stmt_insert->execute()) {
+                            header('Location: login.php?registered=1');
+                            exit;
+                        } else {
+                            $errors[] = 'Registration failed. Try again.';
+                        }
+                        $stmt_insert->close();
+                    } else {
+                        $errors[] = 'Insert query error: ' . $conn->error;
+                    }
                 }
             }
-
             $stmt->close();
         } else {
-            $errors[] = 'Database error: ' . $conn->error;
+            $errors[] = 'Query error: ' . $conn->error;
         }
-
         $conn->close();
     }
 }
@@ -124,232 +115,121 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - <?php echo $site_name; ?></title>
+    <title>Register - FurniCraft</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- ✅ Favicon: Use Absolute URL -->
- <link rel="icon" type="image/x-icon" href="https://furnicraft.techturtle.in/assets/images/favicon/favicon.ico">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://furnicraft.techturtle.in/assets/images/favicon/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://furnicraft.techturtle.in/assets/images/favicon/favicon-32x32.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://furnicraft.techturtle.in/assets/images/favicon/favicon-180x180.png">
-    <link rel="icon" sizes="192x192" href="https://furnicraft.techturtle.in/assets/images/favicon/favicon-192x192.png">
-
+    <link rel="icon" type="image/png" href="https://furnicraft.techturtle.in/assets/images/favicon/favicon-32x32.png">
     <style>
-        .error {
-            color: red;
-            font-size: 0.875em;
-            margin-top: 0.25rem;
-        }
-        .form-control.error {
-            border-color: red;
-        }
+        .error { color: red; font-size: 0.875em; margin-top: 0.25rem; }
+        .form-control.error { border-color: red; }
     </style>
 </head>
 <body>
-    <?php include 'includes/header.php'; ?>
+<?php include 'includes/header.php'; ?>
 
-    <div class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="text-center">Register</h3>
-                    </div>
-                    <div class="card-body">
-                        <?php if (!empty($errors)): ?>
-                            <div class="alert alert-danger">
-                                <ul class="mb-0">
-                                    <?php foreach ($errors as $error): ?>
-                                        <li><?php echo htmlspecialchars($error); ?></li>
-                                    <?php endforeach; ?>
-                                </ul>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header"><h3 class="text-center">Register</h3></div>
+                <div class="card-body">
+                    <?php if (!empty($errors)): ?>
+                        <div class="alert alert-danger"><ul class="mb-0"><?php foreach ($errors as $e) echo "<li>" . htmlspecialchars($e) . "</li>"; ?></ul></div>
+                    <?php endif; ?>
+
+                    <form id="registerForm" method="POST" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" name="name" class="form-control" required value="<?= htmlspecialchars($_POST['name'] ?? '') ?>">
                             </div>
-                        <?php endif; ?>
-
-                        <form id="registerForm" method="POST" action="register.php">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="name" class="form-label">Full Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" 
-                                               value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email" 
-                                               value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" required>
-                                    </div>
-                                </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control" required value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
                             </div>
+                        </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="password" class="form-label">Password</label>
-                                        <input type="password" class="form-control" id="password" name="password" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="confirm_password" class="form-label">Confirm Password</label>
-                                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-                                    </div>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" name="password" class="form-control" id="password" required>
                             </div>
-
-                            <div class="mb-3">
-                                <label for="phone" class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control" id="phone" name="phone" 
-                                       pattern="[0-9]{10}" maxlength="10" 
-                                       oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                       value="<?php echo htmlspecialchars($_POST['phone'] ?? ''); ?>" required>
-                                <div class="form-text">Enter 10-digit phone number (numbers only)</div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" name="confirm_password" class="form-control" required>
                             </div>
+                        </div>
 
-                            <div class="mb-3">
-                                <label for="address" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="address" name="address" 
-                                       value="<?php echo htmlspecialchars($_POST['address'] ?? ''); ?>" required>
+                        <div class="mb-3">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" name="phone" class="form-control" maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <input type="text" name="address" class="form-control" required value="<?= htmlspecialchars($_POST['address'] ?? '') ?>">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">City</label>
+                                <input type="text" name="city" class="form-control" required value="<?= htmlspecialchars($_POST['city'] ?? '') ?>">
                             </div>
-
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label for="city" class="form-label">City</label>
-                                        <input type="text" class="form-control" id="city" name="city" 
-                                               value="<?php echo htmlspecialchars($_POST['city'] ?? ''); ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label for="state" class="form-label">State</label>
-                                        <input type="text" class="form-control" id="state" name="state" 
-                                               value="<?php echo htmlspecialchars($_POST['state'] ?? ''); ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label for="zip_code" class="form-label">ZIP Code</label>
-                                        <input type="text" class="form-control" id="zip_code" name="zip_code" 
-                                               value="<?php echo htmlspecialchars($_POST['zip_code'] ?? ''); ?>" required>
-                                    </div>
-                                </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">State</label>
+                                <input type="text" name="state" class="form-control" required value="<?= htmlspecialchars($_POST['state'] ?? '') ?>">
                             </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">ZIP Code</label>
+                                <input type="text" name="zip_code" class="form-control" required value="<?= htmlspecialchars($_POST['zip_code'] ?? '') ?>">
+                            </div>
+                        </div>
 
-                           
-                            <div class="text-center">
+                        <div class="mb-3">
+                            <label class="form-label">Profile Image</label>
+                            <input type="file" name="image" class="form-control" accept="image/*">
+                        </div>
+
+                        <div class="text-center">
                             <button type="submit" class="btn btn-primary px-4">Register</button>
-                            <!-- <a href="index.php" class="btn btn-outline-secondary px-4">Cancel</a> -->
                         </div>
-                        </form>
+                    </form>
 
-                        <div class="text-center mt-3">
-                            <p>Already have an account? <a href="login.php">Login here</a></p>
-                        </div>
+                    <div class="text-center mt-3">
+                        <p>Already have an account? <a href="login.php">Login here</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <?php include 'includes/footer.php'; ?>
+<?php include 'includes/footer.php'; ?>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $("#registerForm").validate({
-                rules: {
-                    name: {
-                        required: true,
-                        minlength: 2
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    password: {
-                        required: true,
-                        minlength: 6
-                    },
-                    confirm_password: {
-                        required: true,
-                        equalTo: "#password"
-                    },
-                    phone: {
-                        required: true,
-                        minlength: 10,
-                        maxlength: 10,
-                        digits: true
-                    },
-                    address: {
-                        required: true
-                    },
-                    city: {
-                        required: true
-                    },
-                    state: {
-                        required: true
-                    },
-                    zip_code: {
-                        required: true,
-                        minlength: 5
-                    }
-                },
-                messages: {
-                    name: {
-                        required: "Please enter your name",
-                        minlength: "Name must be at least 2 characters long"
-                    },
-                    email: {
-                        required: "Please enter your email",
-                        email: "Please enter a valid email address"
-                    },
-                    password: {
-                        required: "Please enter a password",
-                        minlength: "Password must be at least 6 characters long"
-                    },
-                    confirm_password: {
-                        required: "Please confirm your password",
-                        equalTo: "Passwords do not match"
-                    },
-                    phone: {
-                        required: "Please enter your phone number",
-                        minlength: "Phone number must be exactly 10 digits",
-                        maxlength: "Phone number must be exactly 10 digits",
-                        digits: "Phone number can only contain numbers"
-                    },
-                    address: {
-                        required: "Please enter your address"
-                    },
-                    city: {
-                        required: "Please enter your city"
-                    },
-                    state: {
-                        required: "Please enter your state"
-                    },
-                    zip_code: {
-                        required: "Please enter your ZIP code",
-                        minlength: "ZIP code must be at least 5 digits"
-                    }
-                },
-                errorElement: "div",
-                errorPlacement: function(error, element) {
-                    error.addClass("error");
-                    error.insertAfter(element);
-                },
-                highlight: function(element, errorClass) {
-                    $(element).addClass(errorClass);
-                },
-                unhighlight: function(element, errorClass) {
-                    $(element).removeClass(errorClass);
-                }
-            });
-        });
-    </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script>
+    $("#registerForm").validate({
+        rules: {
+            name: { required: true, minlength: 2 },
+            email: { required: true, email: true },
+            password: { required: true, minlength: 6 },
+            confirm_password: { required: true, equalTo: "#password" },
+            phone: { required: true, minlength: 10, maxlength: 10, digits: true },
+            address: { required: true },
+            city: { required: true },
+            state: { required: true },
+            zip_code: { required: true, minlength: 5 }
+        },
+        messages: {
+            confirm_password: { equalTo: "Passwords do not match" }
+        },
+        errorElement: "div",
+        errorPlacement: function (error, element) {
+            error.addClass("error").insertAfter(element);
+        }
+    });
+</script>
 </body>
-</html> 
+</html>
