@@ -35,475 +35,6 @@ $featuredProducts = getAllProducts();
 
 <!-- Styling -->
 <style>
-.icon-box {
-  padding: 10px 20px;
-  background: #fff;
-  border-radius: 8px;
-  border: 1px solid #eaeaea;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-  white-space: nowrap;
-  font-weight: 500;
-  transition: transform 0.3s ease;
-}
-.icon-box:hover {
-  transform: translateY(-4px);
-}
-.icon-box i {
-  font-size: 1.25rem;
-  color: #b98b57;
-}
-.icon-box span {
-  font-size: 0.95rem;
-  color: #333;
-}
-
-/* category section */
-
-.swiper {
-    width: 100%;
-    padding-top: 30px;
-    padding-bottom: 30px;
-  }
-  .swiper-slide {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-  }
-  .category-card {
-    width: 100%;
-    max-width: 350px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-  }
-  .category-card:hover {
-    transform: translateY(-5px);
-  }
-  .category-card img {
-    height: 300px;
-    object-fit: cover;
-  }
-  .card-img-overlay {
-    background: rgba(0, 0, 0, 0.4);
-    transition: background 0.3s;
-  }
-  .category-card:hover .card-img-overlay {
-    background: rgba(0, 0, 0, 0.6);
-  }
-
-  /* faq */
-
-  .faq-section {
-    background-color: #f8f9fa;
-  }
-  .accordion-button {
-    font-weight: bold;
-    font-size: 1.1rem;
-    background-color: #fff;
-    transition: transform 0.3s ease;
-  }
-  .accordion-button:not(.collapsed) {
-    background-color: #e3f2fd;
-    color: #0d6efd;
-  }
-  .accordion-body {
-    font-size: 1rem;
-    color: #555;
-  }
-  .accordion-button i {
-    color: #0d6efd;
-    transition: transform 0.3s ease;
-  }
-  .accordion-button.collapsed i {
-    transform: rotate(0deg);
-  }
-  .accordion-button:not(.collapsed) i {
-    transform: rotate(180deg);
-  }
-  .icon-rotate {
-    transition: transform 0.3s ease;
-  }
-
-
-    /* ==== Basic Layout: Reels Section ==== */
-.reels-section {
-    height: 100vh;
-    width: 100%;
-    overflow: hidden;
-  }
-  
-  .reels-swiper, .swiper-slide {
-    height: 100%;
-    width: 100%;
-  }
-  
-  .video-row {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: row; /* Side-by-side */
-  }
-  
-  .video-half {
-    width: 50%;
-    height: 100%;
-    overflow: hidden;
-  }
-  
-  .video-half video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  /* ==== Glow Feature Card ==== */
-  .feature-card-glow {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    transition: all 0.4s ease;
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    overflow: hidden;
-    position: relative;
-  }
-  
-  .feature-card-glow:hover {
-    transform: translateY(-10px) scale(1.03);
-    border-color: #0d6efd;
-    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.4);
-  }
-  
-  .feature-icon {
-    transition: transform 0.3s ease;
-  }
-  
-  .feature-card-glow:hover .feature-icon {
-    transform: rotate(8deg) scale(1.2);
-  }
-  
-  /* ==== Hover Scale Effect ==== */
-  .hover-scale {
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-  }
-  
-  .hover-scale:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0, 123, 255, 0.6);
-  }
-  
-  /* ==== Logo Float + Bounce ==== */
-  @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
-  }
-  
-  .logo-float {
-    animation: float 3s ease-in-out infinite;
-  }
-  
-  .logo-float:hover {
-    animation: bounce 0.6s;
-  }
-  
-  @keyframes bounce {
-    0%   { transform: translateY(0); }
-    30%  { transform: translateY(-15px); }
-    50%  { transform: translateY(0); }
-    70%  { transform: translateY(-7px); }
-    100% { transform: translateY(0); }
-  }
-  
-  /* ==== Product Card Hover ==== */
-  .product-card {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .product-image-wrapper {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .product-image-wrapper img {
-    transition: transform 0.3s ease;
-  }
-  
-  .product-image-wrapper:hover img {
-    transform: scale(1.05);
-  }
-  
-  .hover-icons {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    gap: 10px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  
-  .product-image-wrapper:hover .hover-icons {
-    opacity: 1;
-  }
-  
-  .hover-icons .btn {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-  }
-  
-  .hover-icons .btn:hover {
-    transform: scale(1.1);
-    background: white;
-  }
-  
-  .discount-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: #dc3545;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-weight: bold;
-    z-index: 1;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  }
-  
-  .price-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .original-price {
-    text-decoration: line-through;
-    color: #6c757d;
-    font-size: 0.9rem;
-  }
-  
-  .sale-price {
-    color: #0e0c0c;
-    font-weight: bold;
-    font-size: 1.1rem;
-  }
-  
-  /* ==== Card Hover Effects ==== */
-  .card {
-    transition: transform 0.3s ease;
-  }
-  
-  .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  .card-img-top {
-    transition: transform 0.3s ease;
-  }
-  
-  .card:hover .card-img-top {
-    transform: scale(1.05);
-  }
-  
-  /* ==== Category Cards ==== */
-  .category-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-    transition: transform 0.3s ease;
-    border: none;
-    margin: 0 15px;
-  }
-  
-  .category-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  }
-  
-  .category-card .card-img {
-    transition: transform 0.3s ease;
-  }
-  
-  .category-card:hover .card-img {
-    transform: scale(1.05);
-  }
-  
-  .category-card .card-img-overlay {
-    background: rgba(0,0,0,0);
-    transition: all 0.3s ease;
-  }
-  
-  .category-card:hover .card-img-overlay {
-    background: rgba(0,0,0,0.7);
-  }
-  
-  .category-card .card-footer {
-    border-top: none;
-    padding: 1rem;
-  }
-  
-  .category-card .fa-arrow-right {
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: all 0.3s ease;
-  }
-  
-  .category-card:hover .fa-arrow-right {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  
-  /* ==== Carousel Controls & Indicators ==== */
-  .carousel-control-prev,
-  .carousel-control-next {
-    width: 5%;
-    opacity: 0.8;
-  }
-  
-  .carousel-control-prev:hover,
-  .carousel-control-next:hover {
-    opacity: 1;
-  }
-  
-  .carousel-indicators {
-    margin-bottom: 0;
-  }
-  
-  .carousel-indicators button {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin: 0 5px;
-    background-color: #6c757d;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-  }
-  
-  .carousel-indicators button.active {
-    background-color: #0d6efd;
-    transform: scale(1.2);
-  }
-  
-  /* ==== Why Choose Us ==== */
-  .why-choose-us {
-    background-color: #f8f9fa;
-  }
-  
-  .feature-card {
-    background: white;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(0,0,0,0.1);
-  }
-  
-  .feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  }
-  
-  .feature-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(13, 110, 253, 0.1);
-    border-radius: 50%;
-    transition: all 0.3s ease;
-  }
-  
-  .feature-card:hover .feature-icon {
-    background: rgba(13, 110, 253, 0.2);
-    transform: scale(1.1);
-  }
-  
-  /* ==== Hero Slider ==== */
-  .hero-slider {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .slider-content {
-    padding: 100px 0;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  }
-  
-  .slider-text {
-    padding: 20px;
-  }
-  
-  .slider-text h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    color: #212529;
-  }
-  
-  .slider-text .lead {
-    font-size: 1.25rem;
-    margin-bottom: 30px;
-    color: #6c757d;
-  }
-  
-  .slider-image {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .slider-image img {
-    max-height: 400px;
-    object-fit: contain;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-  }
-  
-  .carousel-item {
-    transition: transform 0.6s ease-in-out;
-  }
-  
-
-  .swiper-button-next,
-.swiper-button-prev {
-  color: #000; /* make them visible */
-  z-index: 10;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.swiper-button-next {
-  right: 0;
-}
-
-.swiper-button-prev {
-  left: 0;
-}
-
-
-.gallery-section .swiper-slide {
-  width: auto;
-}
-
-.gallery-img-wrapper {
-  overflow: hidden;
-  border-radius: 12px;
-}
-
-.gallery-img-wrapper img {
-  transition: transform 0.4s ease;
-}
-
-.gallery-img-wrapper:hover img {
-  transform: scale(1.05);
-}
 
 
 </style>
@@ -527,7 +58,7 @@ $featuredProducts = getAllProducts();
     <div class="carousel-inner">
 
       <!-- Slide 1 -->
-      <div class="carousel-item active" style="background: url('assets/images/products/download%20(1).jfif') center center/cover no-repeat; height: 80vh;">
+      <div class="carousel-item active" style="background: url('assets/images/products/living-room-3428529.jpg') center center/cover no-repeat; height: 100vh;">
         <div class="container h-100 d-flex flex-column justify-content-center align-items-center text-center text-white">
           <div class="slider-text">
             <h1 class="display-4 fw-bold animate__animated animate__backInDown">Elegant Home Decor</h1>
@@ -537,7 +68,7 @@ $featuredProducts = getAllProducts();
       </div>
 
       <!-- Slide 2 -->
-      <div class="carousel-item" style="background: url('assets/images/products/Wonderful%20decorations%20😍😍😍.jfif') center center/cover no-repeat; height: 80vh;">
+      <div class="carousel-item" style="background: url('assets/images/products/sanju-pandita-YBfU7TAS8sU-unsplash.jpg') center center/cover no-repeat; height: 100vh;">
         <div class="container h-100 d-flex flex-column justify-content-center align-items-center text-center text-white">
           <div class="slider-text">
             <h1 class="display-4 fw-bold animate__animated animate__lightSpeedInLeft">Wonderful Decorations</h1>
@@ -547,7 +78,7 @@ $featuredProducts = getAllProducts();
       </div>
 
       <!-- Slide 3 -->
-      <div class="carousel-item" style="background: url('assets/images/products/download%20(3)11.jfif') center center/cover no-repeat; height: 80vh;">
+      <div class="carousel-item" style="background: url('assets/images/products/visualsofdana-T5pL6ciEn-I-unsplash.jpg') center center/cover no-repeat; height: 100vh;">
         <div class="container h-100 d-flex flex-column justify-content-center align-items-center text-center text-white">
           <div class="slider-text">
             <h1 class="display-4 fw-bold animate__animated animate__rollIn">Discover New Collections</h1>
@@ -685,7 +216,7 @@ $featuredProducts = getAllProducts();
 <!-- category section -->
 <section class="categories py-5 bg-light">
     <div class="container">
-      <h2 class="text-center mb-4">Shop by Category</h2>
+      <h2 class="text-center mb-4 new">Shop by Category</h2>
 
       <!-- Swiper Container -->
       <div class="swiper categorySwiper">
@@ -755,7 +286,7 @@ $featuredProducts = getAllProducts();
 <!-- New Products Section -->
 <section class="featured-products py-5">
     <div class="container">
-        <h2 class="text-center mb-4">New Products</h2>
+        <h2 class="text-center mb-4 new">New Products</h2>
         <div class="row">
             <?php 
             $displayProducts = array_slice($featuredProducts, 0, 4); // Show only first 4 products
@@ -1023,7 +554,7 @@ $featuredProducts = getAllProducts();
 <!-- Customer Reviews Section -->
 <section class="customer-reviews py-5">
   <div class="container">
-  <h2 class="text-center mb-4"
+  <h2 class="text-center mb-4 new"
     data-aos="fade-up"
     data-aos-duration="1200"
     data-aos-easing="ease-in-out"
@@ -1435,36 +966,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
-
-//   // gallery
-
-//   document.addEventListener("DOMContentLoaded", function () {
-//   new Swiper(".gallerySwiper", {
-//     loop: true,
-//     spaceBetween: 20,
-//     autoplay: {
-//       delay: 2000,
-//       disableOnInteraction: false
-//     },
-//     slidesPerView: 1,
-//     breakpoints: {
-//       576: { slidesPerView: 2 },
-//       768: { slidesPerView: 3 },
-//       992: { slidesPerView: 4 }
-//     },
-//     navigation: {
-//       nextEl: ".swiper-button-next",
-//       prevEl: ".swiper-button-prev"
-//     },
-//     pagination: {
-//       el: ".swiper-pagination",
-//       clickable: true
-//     }
-//   });
-// });
-
-    
-
 </script>
 </body>
 </html>

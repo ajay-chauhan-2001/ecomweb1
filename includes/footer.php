@@ -44,11 +44,11 @@
       </div>
 
       <!-- Newsletter & Social -->
-      <div class="col-md-3">
-        <h5 class="mb-3 fw-bold text-warning">Follow Us</h5>
+      <div class="col-md-2">
+        <h6 class="footer-title">Follow Us</h6>
         <p>
           <a href="mailto:info@furnicraft.com" class="text-decoration-none text-light">
-            <i class="fas fa-envelope me-2 text-light"></i> info@furnicraft.com
+            <i class="fas fa-envelope me-2 text-light"></i>info@furnicraft.com
           </a>
         </p>
         <p>
@@ -99,12 +99,9 @@
 </button>
 
 <!-- Scripts -->
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script> -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> -->
 
 <script>
   AOS.init({ duration: 1000, once: true });
@@ -132,7 +129,8 @@
   border-radius: 18px 18px 0 0;
 }
 .footer-woodmart-furniture .footer-title {
-  color: #ffd803;
+  color: #91bff5;
+
   font-weight: 600;
   margin-bottom: 1rem;
   letter-spacing: 1px;
@@ -147,12 +145,12 @@
   font-size: 0.97rem;
 }
 .footer-woodmart-furniture .footer-list a {
-  color: #e0e6f7;
+  color: #e0e6f7 !important;
   text-decoration: none;
   transition: color 0.2s;
 }
 .footer-woodmart-furniture .footer-list a:hover {
-  color: #ffd803;
+  color: #246ae7 !important;
   text-decoration: underline;
 }
 .footer-woodmart-furniture .form-control {
@@ -195,8 +193,8 @@
 }
 .social-icon:hover {
   transform: translateY(-5px);
-  border-color: #ffd803;
-  background: #ffd803;
+  border-color: #91bff5;
+  background:rgb(0, 2, 3);
   color: #232946;
 }
 /* Platform Colors */
