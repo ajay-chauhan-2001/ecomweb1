@@ -44,7 +44,7 @@
       </div>
 
       <!-- Newsletter & Social -->
-      <div class="col-md-2">
+      <div class="col-md-3">
         <h6 class="footer-title">Follow Us</h6>
         <p>
           <a href="mailto:info@furnicraft.com" class="text-decoration-none text-light">
@@ -99,10 +99,8 @@
 </button>
 
 <!-- Scripts -->
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-
 <script>
   AOS.init({ duration: 1000, once: true });
 
@@ -130,7 +128,6 @@
 }
 .footer-woodmart-furniture .footer-title {
   color: #91bff5;
-
   font-weight: 600;
   margin-bottom: 1rem;
   letter-spacing: 1px;
@@ -153,25 +150,13 @@
   color: #246ae7 !important;
   text-decoration: underline;
 }
-.footer-woodmart-furniture .form-control {
-  border-radius: 6px;
-}
-.footer-woodmart-furniture .btn-warning {
-  border-radius: 6px;
-}
 .footer-woodmart-furniture .footer-desc {
   color: #b8c1ec;
   font-size: 0.98rem;
 }
-.footer-woodmart-furniture hr {
-  border-color: #232946;
-  opacity: 0.5;
-}
 .footer-woodmart-furniture .text-muted {
   color: #b8c1ec !important;
 }
-
-/* Social Icons */
 .footer-social-icons {
   display: flex;
   gap: 12px;
@@ -194,7 +179,7 @@
 .social-icon:hover {
   transform: translateY(-5px);
   border-color: #91bff5;
-  background:rgb(0, 2, 3);
+  background: rgb(0, 2, 3);
   color: #232946;
 }
 /* Platform Colors */
@@ -203,7 +188,6 @@
 .social-icon.instagram {
   background: radial-gradient(circle at 30% 30%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
 }
-
 @media (max-width: 767px) {
   .footer-woodmart-furniture {
     border-radius: 12px 12px 0 0;

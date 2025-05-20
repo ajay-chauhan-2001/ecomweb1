@@ -28,100 +28,91 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - FurniCraft' : 'FurniCraft';
     <link rel="stylesheet" href="assets/css/style.css">
 
     <style>
-        /* Scrolling Announcement Bar */
-        .announcement-bar {
-            background-color: #eaf1f5;
-            color: #000;
-            white-space: nowrap;
-            overflow: hidden;
-            font-weight: 600;
-            font-size: 1rem;
-            position: relative;
-        }
-        .scrolling-text {
-            display: inline-block;
-            padding-left: 100%;
-            animation: scrollText 25s linear infinite;
-        }
-        .scrolling-text:hover {
-            animation-play-state: paused;
-        }
-        @keyframes scrollText {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
-        }
+.announcement-bar {
+    background-color: white;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: 600;
+    font-size: 1rem;
+    position: relative;
+}
 
-        /* Preloader */
-        #globalPreloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #ffffff;
-            z-index: 99999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
+.scrolling-text-wrapper {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
 
-        .preloader-content img {
-            width: 150px;
-            max-width: 60vw;
-            height: auto;
-            animation: bounce 2s infinite;
-        }
+.scroll-item {
+    transition: opacity 0.5s ease-in-out;
+    animation: fadeSlide 0.5s ease-in-out;
+}
 
-        .preloader-content p {
-            margin-top: 15px;
-            font-size: 1.25rem;
-            color: #333;
-            animation: fadeText 2s infinite;
-        }
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* preloader */
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
+#globalPreloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff; /* or dark for dark themes */
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
 
-        @keyframes fadeText {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
+#globalPreloader img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 10px;
+}
 
-        @media (max-width: 768px) {
-            .navbar-nav {
-                flex-direction: column !important;
-            }
-            .navbar-brand img {
-                width: 100px;
-                height: auto;
-            }
-            .dropdown-menu {
-                position: static;
-                float: none;
-            }
-        }
+#globalPreloader p {
+  font-weight: bold;
+  color: #444;
+}
+
+/* Sticky header shadow effect on scroll */
+header.sticky-top {
+    z-index: 1030;
+}
+
+header.sticky-top.scrolled {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease;
+}
+
+
     </style>
 </head>
 <body>
 
-<!-- ✅ Scrolling Announcement Bar -->
+<!-- ✅ Scrolling Announcement Bar (One-by-One Slider) -->
 <div class="announcement-bar py-2">
     <div class="container">
-        <div class="scrolling-text">
-            <span>🔥 10% OFF on all furniture | </span>
-            <span>🚚 Free Shipping on orders above ₹ 24999 </span>
-           
-            
+        <div class="scrolling-text-wrapper text-center">
+            <span class="scroll-item">🔥 10% OFF on all furniture</span>
+            <span class="scroll-item d-none">🚚 Free Shipping on orders above ₹ 24999</span>
+            <span class="scroll-item d-none">🛠️ Customized furniture available on demand</span>
+            <span class="scroll-item d-none">📦 Easy returns & nationwide delivery</span>
         </div>
     </div>
 </div>
 
-<!-- Header Section -->
-<header class="header bold-header shadow-sm rounded-bottom bg-info">
+<!-- ✅ Sticky Header Section -->
+<header class="header bold-header shadow-sm rounded-bottom bg-info sticky-top">
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="index.php">
@@ -181,6 +172,7 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - FurniCraft' : 'FurniCraft';
     </nav>
 </header>
 
+
 <!-- Flash Messages -->
 <div class="container mt-3">
     <?php if (isset($_SESSION['success'])): ?>
@@ -201,7 +193,7 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - FurniCraft' : 'FurniCraft';
 <div id="globalPreloader">
     <div class="preloader-content text-center">
         <img src="assets/images/header.jpeg" alt="Loading...">
-        <p>Loading your experience...</p>
+        <!-- <p>Loading your experience...</p> -->
     </div>
 </div>
 <script>
@@ -233,5 +225,34 @@ function updateCartCount() {
 }
 $(document).ready(function() {
     updateCartCount();
+});
+</script>
+<!-- Scrolling Announcement Bar -->
+<!-- Scrolling text logic -->
+<script>
+$(document).ready(function () {
+    let currentIndex = 0;
+    const items = $('.scroll-item');
+    const totalItems = items.length;
+
+    function showNextItem() {
+        items.eq(currentIndex).addClass('d-none');
+        currentIndex = (currentIndex + 1) % totalItems;
+        items.eq(currentIndex).removeClass('d-none');
+    }
+
+    setInterval(showNextItem, 4000); // Change every 4 seconds
+});
+</script>
+
+<!-- Scroll shadow effect -->
+<script>
+window.addEventListener('scroll', function () {
+    const header = document.querySelector('header.sticky-top');
+    if (window.scrollY > 30) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
 });
 </script>
