@@ -198,3 +198,6 @@
   }
 }
 </style>
+
+
+<?php include 'includes/whatsapp-float.php'; ?>
